@@ -1,0 +1,184 @@
+<?php
+/*
+Template Name: Home Page
+*/?>
+
+<?php include (TEMPLATEPATH . '/header-home.php'); ?>
+
+
+
+<div class="content_internal" >
+ 
+ 
+     <?php if (have_posts()) : ?>
+
+		<?php
+/* 			 echo" <h1>&#147;You Must See An Eclipse Before You Die&#148;</h1>"; */
+		?>	
+		
+		<?php while (have_posts()) : the_post(); ?>
+		<div>	
+
+				<div class="homepage_text">	
+					<h1><?php the_title() ?></h1><?php the_content() ?> 
+					<div class="align-right"><br/>-David Makepeace, Eclipseguy</div>
+				</div>
+
+				
+				
+				<?php 
+				
+					$theme_path = get_bloginfo("siteurl");
+					$theme_path .= "/wp-content/uploads/portrait-dave-homepage.jpg";
+					echo "<div class='homepage_portrait'>  <img height='225px' width='300px' src='".$theme_path."'>  </div>";
+				?>
+				<div class="clear"></div>
+
+
+
+
+
+	<!-- display edit link, and post ID -->
+	<?php 
+		$editstring = '</p><p class="post_id_disp">ID for this post: '.$post->ID.'</p>';
+		//echo $editstring;
+		edit_post_link('Edit this entry.', '<br/><br/><p>', '</p>'.$editstring.''); 
+	?>	
+
+
+
+		</div>
+
+		<?php endwhile; ?>
+
+	<?php else : ?>
+
+		<h2 class="center">Not Found</h2>
+		<?php include (TEMPLATEPATH . '/searchform.php'); ?>
+	<?php endif; ?>
+	
+</div>
+
+
+
+
+
+
+
+ 	
+ <div id="homepage_featured_list">
+ 
+	 <div class="homepage_featured_list_box">
+ 		<h2>Featured Trip Report</h2>
+		<?php //the latest trip report
+			$posts = get_posts(array('category__and'=>array(14,6)));
+			$post = $posts[0];
+			setup_postdata($post);?>
+			<div>
+				<h3><a href="<?php the_permalink(); ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>">
+					<?php the_title_attribute();?></a>
+				</h3>
+					
+				<?php the_excerpt('<p class="serif">Read the rest of this &raquo;</p>');?>
+			</div>
+	 </div>			
+
+	 <div class="homepage_featured_list_box">			
+		<h2>Featured Gallery</h2>
+		<?php //the latest galelry
+			$posts = get_posts(array('category__and'=>array(9,12)));
+			$post = $posts[0];
+			setup_postdata($post);?>
+			<div>
+				<h3>
+	 			 <a href="<?php the_permalink(); ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>">
+				  <?php the_title_attribute();?>
+				 </a>
+				</h3> 
+				
+				<?php the_excerpt('<p class="serif">Read the rest of this &raquo;</p>');?>
+			</div>
+ 	 </div>
+
+</div>
+
+
+
+
+
+
+
+
+<div id="homepage_news">
+	<h1>Latest Headlines</h1>
+	<?php //the three latest news posts
+		$posts = get_posts('cat=1,11');
+		for ( $i=0; $i<3; $i++ ):
+		$post = $posts[$i];
+		setup_postdata($post);?>
+	
+	
+		<div>
+			<div class='homepage_list_thumb'>
+				<?php 
+					$cur_post_data = get_post_custom($i);
+					$cur_post_thumb =  $cur_post_data["post-thumb"][0];
+					
+					if($cur_post_thumb) {
+
+						echo "<a href='".$cur_post_permalink."'>";							
+						echo "<img height='105px' width='130px' src='".$cur_post_thumb."'>";
+						echo "</a>";							
+
+					}else{
+						$thumb_path = get_bloginfo("siteurl");
+						$thumb_path .= "/wp-content/uploads/nothumb.jpg";	
+						echo "<img height='105px' width='130px' src='".$thumb_path."'>";						
+					}
+				
+					
+	
+
+
+				?>
+			</div>
+		
+			<div class='homepage_list_textinfo'>
+		 	 <h2>
+				<a href="<?php the_permalink(); ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>">
+					<?php the_title_attribute();?>
+				</a>
+			  </h2>
+				<?php the_excerpt('<p class="serif">Read the rest of this &raquo;</p>');?>
+			</div>	
+			
+		</div>
+		
+		<div class="clear"></div>
+		
+		<div class="hline_blue"></div>
+		<?php endfor;?>
+		
+		
+		<?php
+			$siteurl = get_bloginfo("siteurl");
+			echo "<h2><a href='".$siteurl."/news/' target='_self'>Read More News Headlines...</a></h2>";
+		?>
+</div>		
+
+<div class="clear"></div>		
+
+
+
+		
+<?php include (TEMPLATEPATH . '/webring.php'); ?>		
+
+
+
+	
+		
+</div>
+
+<?php //get_sidebar(); ?>
+
+<?php get_footer(); ?>

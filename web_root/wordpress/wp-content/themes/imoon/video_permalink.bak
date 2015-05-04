@@ -1,0 +1,158 @@
+<?php
+/*
+Template Name: Video Permalink
+*/
+?>
+
+
+
+
+<?php get_header(); ?>
+
+	<div id="content" class="narrowcolumn">
+
+		<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
+		<div class="post" id="post-<?php the_ID(); ?>">
+		
+		<!-- <h2><?php the_title(); ?></h2> -->
+		
+		  
+  
+				<?php wp_link_pages(array('before' => '<p><strong>Pages:</strong> ', 'after' => '</p>', 'next_or_number' => 'number')); ?>	     		
+			<div class="entry">
+				<?php 
+				//the_content('<p class="serif">Read the rest of this page &raquo;</p>'); 
+				?>
+
+	
+			<!-- get custom fields from page data and display them -->
+			
+			
+	   <div class="vid_content">
+	   		<!-- standard WP post title display -->
+			<h2><?php the_title(); ?></h2>
+	   
+			<!-- video embed code -->	   
+			<div class="vid_embed"><?php
+				$vid_embed_code = get_post_meta($post->ID, 'vid-embed-code', true);
+				echo $vid_embed_code; 
+			?></div>
+			
+			<!-- video description -->						
+			<div class="vid_description"><?php
+				//$vid_description = get_post_meta($post->ID, 'vid-description', true);
+				//echo $vid_description; 
+				the_content('<p class="serif">Read the rest of this page &raquo;</p>');
+			?></div>
+			
+			<!-- video duration -->
+			<div class="vid_duration">Duration: <?php 
+				$vid_duration = get_post_meta($post->ID, 'vid-duration', true);
+				echo $vid_duration;
+			?></div>
+
+
+			
+		<br/><br/><br/>
+
+
+			<!-- get custom field info for all vid-related keys -->
+			<h2>Related Media:</h2>			
+			
+			<?php 
+			
+				//-- grab array data and establish size --
+				$vid_related = get_post_meta($post->ID, 'vid-related', false); 
+				//echo $vid_related[0],",", $vid_related[1],",",  $vid_related[2], ", <-- related page IDs";
+				
+				$rel_count = sizeof($vid_related);
+				$rel_count_adjusted = $rel_count - 1;
+				echo "<br/>size of array = ".$rel_count."<br>";
+
+				//-- set up loop to fetch and write related media from custom fields
+				$counter = 0;
+								
+				while ($counter <= $rel_count_adjusted) {
+				
+					// echo $counter." w00t <br/>";
+					
+
+					echo "<div class='vid_related'>";
+					echo "<ul>";
+					
+						//-- grab video post title by ID --
+						$rel_title = wp_list_pages("include=".$vid_related[$counter]."&title_li=&echo=0");
+						echo $rel_title;
+						
+					echo "</ul>";
+					
+						//-- grab video post description by ID --
+						$vid_related_description = get_post_meta($vid_related[$counter], "vid-description", true);
+						echo $vid_related_description;
+						
+					echo "</div>";
+								
+				
+					
+					$counter ++;					
+				}
+			?>
+
+		<br/><br/><br/>
+			
+			<!-- display related media 1        -->
+			<h2>Related Media:</h2>
+
+			<div class="vid_related"> 
+			<!-- title & link 1-->
+			<ul>
+			<?php
+				$rel_title = wp_list_pages("include=".$vid_related[0]."&title_li=&echo=0");
+				echo $rel_title;
+			?>
+			</ul>
+			
+			<!-- description 1-->
+			<?php
+				$vid_related_description = get_post_meta($vid_related[0], 'vid-description', true);
+				echo $vid_related_description;
+			?>
+			
+			</div>
+			<div class="vid_related">
+			
+			<!-- title & link 2-->
+			<ul>
+			<?php
+				$rel_title = wp_list_pages("include=".$vid_related[1]."&title_li=&echo=0");
+				echo $rel_title;
+			?>
+			</ul>
+			
+			<!-- description 2-->
+			<?php
+				$vid_related_description = get_post_meta($vid_related[1], 'vid-description', true);
+				echo $vid_related_description;
+			?>
+			
+			
+			
+			</div>			
+			
+		</div>		
+				
+
+			</div>
+		</div>
+		
+		<?php endwhile; endif; ?>
+		
+
+	
+	<?php edit_post_link('Edit this entry.', '<p>', '</p>'); ?>
+	<?php echo $post->ID ?>
+	</div>
+
+<?php get_sidebar(); ?>
+
+<?php get_footer(); ?>
