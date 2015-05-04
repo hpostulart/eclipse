@@ -14,6 +14,9 @@
  * remove or comment out: add_theme_support('jquery-cdn');
  * ======================================================================== */
 
+
+
+
 (function($) {
 
   // Use this variable to set up the common and page specific functions. If you
@@ -23,16 +26,6 @@
     'common': {
       init: function() {
         // JavaScript to be fired on all pages
-
-
-        var container = document.querySelector('.masonrywrapper');
-        var msnry = new Masonry( masonrywrapper, {
-          // options
-          // columnWidth: 200,
-          itemSelector: '.masonryitem'
-        });
-
-
       },
       finalize: function() {
         // JavaScript to be fired on all pages, after page specific JS is fired
