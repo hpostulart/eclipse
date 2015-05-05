@@ -4,6 +4,10 @@
       "files": [
         "scripts/main.js"
       ],
+      "vendor":[
+        "scripts/masonry-init.js",
+        "scripts/packery.pkgd.min.js"
+      ],
       "main": true
     },
     "main.css": {
@@ -22,18 +26,6 @@
     },
     "modernizr.js": {
       "bower": ["modernizr"]
-    },
-    "masonry.pkgd.min.js": {
-      "vendor": ["assets/scripts/masonry.pkgd.min.js"]
-    },
-    "masonry-init.js": {
-      "vendor": ["assets/scripts/masonry-init.js"]
-    },
-    "packery.pkgd.min.js": {
-      "vendor": ["assets/scripts/packery.pkgd.min.js"]
-    },
-    "packery-init.js": {
-      "vendor": ["assets/scripts/packery-init.js"]
     }
   },
   "config": {
