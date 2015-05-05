@@ -4,7 +4,7 @@ $sidebar-sm-columns:    4;
 
 // Colors
 $white:                 #ffffff;
-$blue-medium:						#4BA6D9;
+$blue-medium:           #4BA6D9;
 
 $brand-primary:         #EA9E21;
 $brand-secondary:       $blue-medium;
@@ -32,3 +32,26 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#33aeaeae', e
 }
 
 
+.btn-base{
+  padding: 5px 8px;
+  text-transform: uppercase;
+}
+
+// .btn-backflip{
+//  @extend .btn-base;
+//  color: $brand-primary;
+//  &:hover{
+//    background: $brand-primary;
+//    color: $white;
+//  }
+// }
+
+@mixin btn-backflip($front,$back,$fronthover,$backhover){
+  @extend .btn-base;
+  color: $front;
+  background: $back;
+  &:hover{
+    color: $fronthover;
+    background: $backhover;
+  }
+}

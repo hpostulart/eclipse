@@ -1,0 +1,34 @@
+header.banner{
+  position: relative;
+  @extend .clearfix;
+  min-height: 400px;
+}
+
+.nav-main{
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0,0,0,0.7);
+  border-top: 1px solid rgba(255,255,255,0.2);
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+
+  -webkit-box-shadow: 0 15px 30px 3px rgba(0,0,0,.6);
+  box-shadow: 0 15px 30px 3px rgba(0,0,0,.6);
+
+  ul{
+    display: block;
+    padding: 0;
+    text-align: center;
+
+    li{
+      list-style-type: none;
+      display: inline-block;
+      width: auto;
+      a{
+        @include btn-backflip($brand-primary,'transparent',$white,$brand-primary);
+        font-size: 1.5rem;
+      }
+    }
+  }
+}

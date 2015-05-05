@@ -6,7 +6,7 @@
 
   <div class="row">
     <div class="col-sm-12">
-      <h2 class="centered"><?= __('Selected Eclipse Media','eg'); ?></h2>
+      <h2 class="centered"><?= __('Videos','eg'); ?></h2>
     </div>
   </div>
 
@@ -15,12 +15,13 @@
     <div class="masonrywrapper" >
       <?php
         $args = array(
-          "post_type"        =>  array( 'post', 'videos', 'reports' ),
-          "posts_per_page"   => 24,
+          "post_type"        =>  array( 'videos',),
+          "posts_per_page"   => 99,
           "order"            => 'desc'
         );
 
         $frontquery = new WP_Query($args);
+        $count = 1;
       ?>
 
       <?php if ( $frontquery->have_posts() ) : ?>
@@ -28,7 +29,7 @@
 
         <!-- the loop -->
         <?php while ( $frontquery->have_posts() ) : $frontquery->the_post(); ?>
-          <div class="masonryitem listing-block">
+          <div class="masonryitem listing-block <?php if($count==3) echo 'feat'; ?>">
             <a class="inner" href="<?= get_permalink($post->ID); ?>">
               <?php
                 $posttype = get_post_type( $post );
@@ -72,6 +73,7 @@
               <div class="type-label"><?= $labeltext; ?></div>
             </a>
           </div>
+          <?php $count ++; ?>
         <?php endwhile; ?>
         <!-- end of the loop -->
 

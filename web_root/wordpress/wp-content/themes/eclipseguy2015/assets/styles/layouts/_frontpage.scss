@@ -1,0 +1,23 @@
+.subheader{
+
+  position: relative;
+  // top: 0;
+  // left: 0;
+  // right: 0;
+  // z-index: -10;
+  @extend .clearfix;
+
+  &.frontpage{
+    padding-top: 40px;
+    padding-bottom: 40px;
+    // height: 300px;
+    // background: rgba(0,0,0, .82);
+  }
+}
+
+.intro-headshot{
+  img{
+    // @extend .img-responsive-grow;
+    @extend .thumb-bordered;
+  }
+}

@@ -54,6 +54,8 @@ function display_sidebar() {
       [
         'is_404',
         'is_front_page',
+        ['is_page', 'videos'],
+        ['is_page', 'trip-reports'],
         ['is_page_template', 'template-custom.php']
       ]
     );
