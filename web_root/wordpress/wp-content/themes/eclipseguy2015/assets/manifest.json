@@ -23,11 +23,8 @@
     "modernizr.js": {
       "bower": ["modernizr"]
     },
-    "masonry.pkgd.min.js": {
-      "vendor": ["assets/scripts/masonry.pkgd.min.js"]
-    },
-    "masonry-init.js": {
-      "vendor": ["assets/scripts/masonry-init.js"]
+    "imagesloaded.pkgd.min.js": {
+      "vendor": ["assets/scripts/imagesloaded.pkgd.min.js"]
     },
     "packery.pkgd.min.js": {
       "vendor": ["assets/scripts/packery.pkgd.min.js"]

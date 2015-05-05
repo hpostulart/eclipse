@@ -1,3 +1,11 @@
+.alert-label{
+  color: red;
+  font-size: 1.3rem;
+  padding: 10px;
+  border: 1px solid red;
+  text-align: center;
+}
+
 body{
   background-image: url(../images/starfield.jpg);
   background-size: cover;
@@ -51,7 +59,7 @@ h2{
 
   @include make-sm-column(6);
   @include make-md-column(4);
-  @include make-lg-column(3);
+  @include make-lg-column(4);
   @media (max-width: $screen-xs-max){
     width: 100%;
   }
@@ -63,7 +71,7 @@ h2{
   &.feat{
     @include make-sm-column(12);
     @include make-md-column(8);
-    @include make-lg-column(9);
+    @include make-lg-column(8);
   }
 
   .inner{

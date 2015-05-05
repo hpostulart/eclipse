@@ -9,17 +9,17 @@
       return
     }
 
-    // console.log('eclipseguy: typekit load done, loading masonry!');
-    // $container.masonry({
-    //   itemSelector: '.masonryitem',
-    // });
+    console.log('eclipseguy: container initialized, loading masonry...');
+    $container.packery({
+      itemSelector: '.masonryitem',
+    });
   };
 
   $(function(){
-    // $container = $('.masonrywrapper');
+    $container = $('.masonrywrapper');
     // // trigger masonry on doc ready
-    // // console.log('foo');
-    // triggerMasonry();
+    console.log('eclipseguy: ...attempting to trigger masonry');
+    triggerMasonry();
   });
 
   // trigger masonry when fonts have loaded
@@ -27,4 +27,14 @@
     active: triggerMasonry,
     inactive: triggerMasonry
   });
+
+
+  $('.masonrywrapper').imagesLoaded( function() {
+    console.log('slurpees');
+    triggerMasonry();
+  });
+
 })(jQuery);
+
+
+
