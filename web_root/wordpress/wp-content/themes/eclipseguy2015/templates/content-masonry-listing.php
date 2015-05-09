@@ -18,7 +18,7 @@
                   // 'alt' => trim( strip_tags( $attachment->post_excerpt ) ),
                   // 'title' => trim( strip_tags( $attachment->post_title ) ),
                 );
-                $thumb_id = get_post_thumbnail_id( $post_id );
+                $thumb_id = get_post_thumbnail_id( $post->ID );
                 $thumb_obj = wp_get_attachment_image_src( $thumb_id, 'masonry-item-img');
 
                 if( $thumb_obj[1] < 600){
