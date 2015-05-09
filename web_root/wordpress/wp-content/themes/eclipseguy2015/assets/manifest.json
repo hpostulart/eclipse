@@ -2,8 +2,7 @@
   "dependencies": {
     "main.js": {
       "files": [
-        "scripts/main.js",
-        "scripts/masonry-init.js"
+        "scripts/main.js"
       ],
       "main": true
     },
@@ -23,6 +22,15 @@
     },
     "modernizr.js": {
       "bower": ["modernizr"]
+    },
+    "imagesloaded.pkgd.min.js": {
+      "vendor": ["assets/scripts/imagesloaded.pkgd.min.js"]
+    },
+    "packery.pkgd.min.js": {
+      "vendor": ["assets/scripts/packery.pkgd.min.js"]
+    },
+    "packery-init.js": {
+      "vendor": ["assets/scripts/packery-init.js"]
     }
   },
   "config": {

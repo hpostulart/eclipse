@@ -17,10 +17,11 @@ $sage_includes = [
   'lib/config.php',                // Configuration
   'lib/assets.php',                // Scripts and stylesheets
   'lib/titles.php',                // Page titles
-  'lib/extras.php',                // Custom functions
-  'lib/cpt-eg-videos.php',                // Custom functions
-  'lib/cpt-eg-galleries.php',                // Custom functions
-  'lib/cpt-eg-trip-reports.php',                // Custom functions
+  'lib/extras.php',                // Custom sage functions
+  'lib/custom.php',                // Custom eclipseguy functions
+  'lib/cpt-eg-videos.php',         // Custom functions
+  'lib/cpt-eg-galleries.php',      // Custom functions
+  'lib/cpt-eg-trip-reports.php',   // Custom functions
 ];
 
 foreach ($sage_includes as $file) {

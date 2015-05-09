@@ -1,1 +1,6 @@
-<?php dynamic_sidebar('sidebar-primary'); ?>
+<?php
+
+?>
+
+
+sidebar content
