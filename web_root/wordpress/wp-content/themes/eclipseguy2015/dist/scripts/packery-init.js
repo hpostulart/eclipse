@@ -1,0 +1,2 @@
+!function(e){function o(){i&&(console.log("eclipseguy: container initialized, loading masonry..."),i.packery({itemSelector:".masonryitem"}))}console.log("eclipseguy: testing for typekit load status");var i;e(function(){i=e(".masonrywrapper"),console.log("eclipseguy: ...attempting to trigger masonry"),o()}),Typekit.load({active:o,inactive:o}),e(".masonrywrapper").imagesLoaded(function(){console.log("slurpees"),o()})}(jQuery);
+//# sourceMappingURL=packery-init.js.map
