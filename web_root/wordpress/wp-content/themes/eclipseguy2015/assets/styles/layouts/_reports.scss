@@ -1,0 +1,57 @@
+.header-report-single{
+  text-align: center;
+
+  h1{
+    margin: 30px auto 50px auto;
+    font-size: 2.8rem;
+    color: $brand-secondary;
+    text-transform: uppercase;
+  }
+}
+
+
+h3{
+  color: $brand-secondary;
+  .partnum{
+    color: #ccc;
+  }
+}
+
+
+.trip-report-nav{
+  @include make-md-column(3);
+
+  ul{
+    padding: 0;
+  }
+
+  li{
+    list-style-type: none;
+    margin-bottom: 5px;
+    @include ep-panel-bg();
+    padding: 3px 6px;
+    margin-left: -10px;
+    margin-right: -10px;
+    line-height: 1em;
+    text-align: right;
+  }
+}
+
+.trip-report-content{
+  @include make-md-column(9);
+  margin-bottom: 50px;
+
+  h3{
+    margin-top: 0;
+  }
+
+  img{
+    @extend .img-responsive-grow;
+  }
+
+  .trip-report-section{
+    @include ep-panel-bg();
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+}
