@@ -83,9 +83,13 @@ function assets() {
     wp_enqueue_script('tripnav', asset_path('scripts/trip-nav-follow.js'), ['jquery'], null, true);
   }
 
-  // if( is_front_page() || is_page('videos') || is_page('trip-reports') ){
+  if( is_front_page() ){
    wp_enqueue_script('packery-init', asset_path('scripts/packery-init.js'), ['jquery'], null, true);
-  // }
+  }
+
+  if(is_page('videos') || is_page('trip-reports')){
+   wp_enqueue_script('packery-init-alm', asset_path('scripts/packery-init-alm.js'), ['jquery'], null, true);
+  }
 
    if( !is_page('videos') && !is_page('trip-reports') ){
      wp_enqueue_script('typekit-init', asset_path('scripts/typekit-init.js'), ['jquery'], null, true);
