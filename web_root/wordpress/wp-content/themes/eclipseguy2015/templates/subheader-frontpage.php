@@ -6,11 +6,11 @@
   <div class="container">
     <div class="row">
 
-      <div class="col-sm-8">
+      <div class="col-sm-6">
         <?= $post->post_content; ?>
       </div>
 
-      <div class="col-sm-4">
+      <div class="col-sm-6">
         <div class="intro-headshot">
            <?php the_post_thumbnail( 'full' ); ?>
         </div>

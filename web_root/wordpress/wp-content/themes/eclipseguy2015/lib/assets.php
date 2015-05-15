@@ -78,7 +78,18 @@ function assets() {
   // wp_enqueue_script('masonry-init', asset_path('scripts/masonry-init.js'), ['jquery'], null, true);
   wp_enqueue_script('imgzldd', asset_path('scripts/imagesloaded.pkgd.min.js'), ['jquery'], null, true);
   wp_enqueue_script('packery', asset_path('scripts/packery.pkgd.min.js'), ['jquery'], null, true);
-  wp_enqueue_script('packery-init', asset_path('scripts/packery-init.js'), ['jquery'], null, true);
+
+  if( is_singular('reports') ){
+    wp_enqueue_script('tripnav', asset_path('scripts/trip-nav-follow.js'), ['jquery'], null, true);
+  }
+
+  // if( is_front_page() || is_page('videos') || is_page('trip-reports') ){
+   wp_enqueue_script('packery-init', asset_path('scripts/packery-init.js'), ['jquery'], null, true);
+  // }
+
+   if( !is_page('videos') && !is_page('trip-reports') ){
+     wp_enqueue_script('typekit-init', asset_path('scripts/typekit-init.js'), ['jquery'], null, true);
+   }
 }
 add_action('wp_enqueue_scripts', __NAMESPACE__ . '\\assets', 100);
 

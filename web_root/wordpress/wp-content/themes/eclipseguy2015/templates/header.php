@@ -27,5 +27,7 @@
     get_template_part("templates/subheader","frontpage");
   }if(is_singular('reports')){
     get_template_part("templates/subheader","report");
+  }if(is_singular('videos')){
+    get_template_part("templates/subheader","videos");
   }
 ?>

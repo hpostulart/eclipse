@@ -31,6 +31,12 @@
     },
     "packery-init.js": {
       "vendor": ["assets/scripts/packery-init.js"]
+    },
+    "trip-nav-follow.js": {
+      "vendor": ["assets/scripts/trip-nav-follow.js"]
+    },
+    "typekit-init.js": {
+      "vendor": ["assets/scripts/typekit-init.js"]
     }
   },
   "config": {

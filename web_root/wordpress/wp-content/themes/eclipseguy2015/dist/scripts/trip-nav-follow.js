@@ -1,0 +1,2 @@
+!function(o){var p=o("#trip-report-nav-pusher"),n=o(window),r=p.offset(),t=75;n.scroll(function(){p.stop().animate(n.scrollTop()>r.top?{paddingTop:n.scrollTop()-r.top+t}:{paddingTop:0})})}(jQuery);
+//# sourceMappingURL=trip-nav-follow.js.map

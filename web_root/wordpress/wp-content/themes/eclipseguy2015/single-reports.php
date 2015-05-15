@@ -4,20 +4,21 @@
 
 <div class="row">
   <aside class="trip-report-nav">
+    <div id="trip-report-nav-pusher"></div>
     <?php if( have_rows('trip_report_sections') ): ?>
     <ul>
       <?php $count = 1; ?>
       <?php while( have_rows('trip_report_sections') ): the_row(); ?>
 
         <?php
-
+          $pretitle = get_sub_field('trip_report_section_title');
           if($pretitle != ""){
             $sep = ":";
           }else{
             $sep = '';
           }
         ?>
-        <li><a href="#"><?php echo 'Part '.$count.$sep.'&nbsp;'; echo get_sub_field('trip_report_section_title'); ?></a></li>
+        <li><a href="#p-<?=$count;?>"><?php echo 'Part '.$count.$sep.'&nbsp;'; echo get_sub_field('trip_report_section_title'); ?></a></li>
         <?php $count ++; ?>
       <?php endwhile;?>
     </ul>
@@ -37,11 +38,12 @@
               // vars
               // $image = get_sub_field('image');
               $pretitle = get_sub_field('trip_report_section_title');
-
               $title = '<span class="partnum">Part '.$count.$sep.'&nbsp;</span>' . $pretitle;
               $content = get_sub_field('trip_report_section_content');
               // $link = get_sub_field('link');
-              echo '<div class="trip-report-section">';
+              // echo '<a name="p-'.$count.'">';
+              $anchor = "p-".$count;
+              echo '<div id="'.$anchor.'" class="trip-report-section">';
               echo '<h3>' . $title . '</h3>';
               echo $content;
               echo '</div>';
