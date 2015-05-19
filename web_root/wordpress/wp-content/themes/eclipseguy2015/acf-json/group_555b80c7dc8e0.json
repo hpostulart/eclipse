@@ -1,0 +1,38 @@
+{
+    "key": "group_555b80c7dc8e0",
+    "title": "Frontpage Video",
+    "fields": [
+        {
+            "key": "field_555b80cd69d6a",
+            "label": "Frontpage Video URL",
+            "name": "eg_frontpage_video",
+            "type": "oembed",
+            "instructions": "Please paste the URL for a video hosted on Vimeo or Youtube (note that you don't need the full embed code \u2014 just the URL of the page on Vimeo\/Youtube \u2014 we'll generate the embed code automagically!)",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "width": "",
+            "height": ""
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "page",
+                "operator": "==",
+                "value": "352"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "modified": 1432060343
+}
