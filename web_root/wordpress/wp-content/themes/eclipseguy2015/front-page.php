@@ -6,6 +6,14 @@
 
   <div class="row">
     <div class="col-sm-12">
+      <div class="embed-container">
+        <?= get_field('eg_frontpage_video',$post->ID); ?>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
       <h2 class="centered"><?= __('Selected Eclipse Media','eg'); ?></h2>
     </div>
   </div>
