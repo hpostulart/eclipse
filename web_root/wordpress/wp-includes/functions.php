@@ -381,7 +381,6 @@ function maybe_serialize( $data ) {
 
 	// Double serialization is required for backward compatibility.
 	// See https://core.trac.wordpress.org/ticket/12930
-	// Also the world will end. See WP 3.6.1.
 	if ( is_serialized( $data, false ) )
 		return serialize( $data );
 
@@ -2474,7 +2473,6 @@ function _default_wp_die_handler( $message, $title = '', $args = array() ) {
 <html xmlns="http://www.w3.org/1999/xhtml" <?php if ( function_exists( 'language_attributes' ) && function_exists( 'is_rtl' ) ) language_attributes(); else echo "dir='$text_direction'"; ?>>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="viewport" content="width=device-width">
 	<title><?php echo $title ?></title>
 	<style type="text/css">
 		html {
@@ -3757,7 +3755,7 @@ function wp_guess_url() {
 			if ( false !== strpos( $_SERVER['SCRIPT_FILENAME'], $abspath_fix ) ) {
 				// Request is hitting a file inside ABSPATH
 				$directory = str_replace( ABSPATH, '', $script_filename_dir );
-				// Strip off the sub directory, and any file/query params
+				// Strip off the sub directory, and any file/query paramss
 				$path = preg_replace( '#/' . preg_quote( $directory, '#' ) . '/[^/]*$#i', '' , $_SERVER['REQUEST_URI'] );
 			} elseif ( false !== strpos( $abspath_fix, $script_filename_dir ) ) {
 				// Request is hitting a file above ABSPATH
@@ -4440,7 +4438,6 @@ function send_frame_options_header() {
  * Retrieve a list of protocols to allow in HTML attributes.
  *
  * @since 3.3.0
- * @since 4.3.0 Added 'webcal' to the protocols array.
  *
  * @see wp_kses()
  * @see esc_url()
@@ -4451,7 +4448,7 @@ function wp_allowed_protocols() {
 	static $protocols;
 
 	if ( empty( $protocols ) ) {
-		$protocols = array( 'http', 'https', 'ftp', 'ftps', 'mailto', 'news', 'irc', 'gopher', 'nntp', 'feed', 'telnet', 'mms', 'rtsp', 'svn', 'tel', 'fax', 'xmpp', 'webcal' );
+		$protocols = array( 'http', 'https', 'ftp', 'ftps', 'mailto', 'news', 'irc', 'gopher', 'nntp', 'feed', 'telnet', 'mms', 'rtsp', 'svn', 'tel', 'fax', 'xmpp' );
 
 		/**
 		 * Filter the list of protocols allowed in HTML attributes.

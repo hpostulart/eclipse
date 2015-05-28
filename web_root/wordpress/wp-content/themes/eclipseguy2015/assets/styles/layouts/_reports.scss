@@ -37,6 +37,29 @@ h3{
   }
 }
 
+
+body.trip-wide{
+  .main{
+    @include make-md-column(12);
+    .trip-report-content{
+      @include make-md-column-pull(3);
+    }
+    .trip-report-nav{
+      @include make-md-column-push(9);
+      li{
+        text-align: left;
+      }
+    }
+  }
+  .sidebar{
+   @include make-md-column(12);
+  }
+
+  .listing-block{
+   @include make-md-column(4);
+  }
+}
+
 .trip-report-content{
   @include make-md-column(9);
   margin-bottom: 50px;
@@ -47,12 +70,15 @@ h3{
 
   img{
     @extend .img-responsive-grow;
+    margin-top: 30px;
   }
 
   .trip-report-section{
-    @include ep-panel-bg();
+    @extend .ep-panel-bg-dark;
     padding: 15px;
     margin-bottom: 20px;
+
+
   }
 
   figure{

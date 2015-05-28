@@ -532,28 +532,7 @@ function wp_list_categories( $args = '' ) {
 		}
 	} else {
 		if ( ! empty( $show_option_all ) ) {
-
-			$posts_page = '';
-
-			// For taxonomies that belong only to custom post types, point to a valid archive.
-			$taxonomy_object = get_taxonomy( $r['taxonomy'] );
-			if ( ! in_array( 'post', $taxonomy_object->object_type ) && ! in_array( 'page', $taxonomy_object->object_type ) ) {
-				foreach ( $taxonomy_object->object_type as $object_type ) {
-					$_object_type = get_post_type_object( $object_type );
-
-					// Grab the first one.
-					if ( ! empty( $_object_type->has_archive ) ) {
-						$posts_page = get_post_type_archive_link( $object_type );
-						break;
-					}
-				}
-			}
-
-			// Fallback for the 'All' link is the front page.
-			if ( ! $posts_page ) {
-				$posts_page = 'page' == get_option( 'show_on_front' ) && get_option( 'page_for_posts' ) ? get_permalink( get_option( 'page_for_posts' ) ) : home_url( '/' );
-			}
-
+			$posts_page = ( 'page' == get_option( 'show_on_front' ) && get_option( 'page_for_posts' ) ) ? get_permalink( get_option( 'page_for_posts' ) ) : home_url( '/' );
 			$posts_page = esc_url( $posts_page );
 			if ( 'list' == $r['style'] ) {
 				$output .= "<li class='cat-item-all'><a href='$posts_page'>$show_option_all</a></li>";
@@ -1165,15 +1144,13 @@ class Walker_CategoryDropdown extends Walker {
 		/** This filter is documented in wp-includes/category-template.php */
 		$cat_name = apply_filters( 'list_cats', $category->name, $category );
 
-		if ( isset( $args['value_field'] ) && isset( $category->{$args['value_field']} ) ) {
-			$value_field = $args['value_field'];
-		} else {
-			$value_field = 'term_id';
+		if ( ! isset( $args['value_field'] ) || ! isset( $category->{$args['value_field']} ) ) {
+			$args['value_field'] = 'term_id';
 		}
 
-		$output .= "\t<option class=\"level-$depth\" value=\"" . esc_attr( $category->{$value_field} ) . "\"";
+		$output .= "\t<option class=\"level-$depth\" value=\"" . esc_attr( $category->{$args['value_field']} ) . "\"";
 
-		if ( $category->{$value_field} == $args['selected'] )
+		if ( $category->term_id == $args['selected'] )
 			$output .= ' selected="selected"';
 		$output .= '>';
 		$output .= $pad.$cat_name;

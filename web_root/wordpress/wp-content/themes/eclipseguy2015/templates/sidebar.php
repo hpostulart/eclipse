@@ -1,4 +1,4 @@
-<section class="related-listing">
+<section class="related-listing row">
 
   <div class="col-sm-12">
     <h2>Related Media</h2>

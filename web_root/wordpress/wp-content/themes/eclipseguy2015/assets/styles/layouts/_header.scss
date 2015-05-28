@@ -29,6 +29,13 @@ header.banner{
       list-style-type: none;
       display: inline-block;
       width: auto;
+
+      &.current-menu-item{
+        background: $brand-primary;
+        a{
+          color: white;
+        }
+      }
       a{
         @include btn-backflip($brand-primary,'transparent',$white,$brand-primary);
         font-size: 1.5rem;

@@ -22,3 +22,22 @@ if( function_exists('acf_add_options_page') ) {
   // acf_add_options_sub_page('Footer');
 
 }
+
+
+
+add_filter( 'body_class', 'my_class_names' );
+function my_class_names( $classes ) {
+  // add 'class-name' to the $classes array
+
+  if(is_singular('reports')){
+    $wide = get_field('eg_trip_wide_format');
+    var_dump($wide);
+    if($wide == true){
+      $classes[] = 'trip-wide';
+    }else{
+      $classes[] = 'trip-narrow';
+    }
+  }
+  // return the $classes array
+  return $classes;
+}

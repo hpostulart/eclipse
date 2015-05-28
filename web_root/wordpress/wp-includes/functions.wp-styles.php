@@ -98,7 +98,6 @@ function wp_add_inline_style( $handle, $data ) {
  * @link http://www.w3.org/TR/CSS2/media.html#media-types List of CSS media types.
  *
  * @since 2.6.0
- * @since 4.3.0 A return value was added.
  *
  * @param string      $handle Name of the stylesheet.
  * @param string|bool $src    Path to the stylesheet from the WordPress root directory. Example: '/css/mystyle.css'.
@@ -108,12 +107,11 @@ function wp_add_inline_style( $handle, $data ) {
  * @param string      $media  Optional. The media for which this stylesheet has been defined.
  *                            Default 'all'. Accepts 'all', 'aural', 'braille', 'handheld', 'projection', 'print',
  *                            'screen', 'tty', or 'tv'.
- * @return bool Whether the style has been registered. True on success, false on failure.
  */
 function wp_register_style( $handle, $src, $deps = array(), $ver = false, $media = 'all' ) {
 	_wp_scripts_maybe_doing_it_wrong( __FUNCTION__ );
 
-	return wp_styles()->add( $handle, $src, $deps, $ver, $media );
+	wp_styles()->add( $handle, $src, $deps, $ver, $media );
 }
 
 /**
