@@ -10,12 +10,12 @@ h1.vidtitle{
 
 .single-video-player{
   @include make-sm-column(12);
-  @include make-md-column(8);
+  @include make-md-column(12);
 }
 
 .vid-single-description{
   @include make-sm-column(12);
-  @include make-md-column(4);
+  @include make-md-column(12);
 
   margin-bottom: 50px;
   font-size: 1.5rem;
