@@ -6,7 +6,11 @@ use Roots\Sage\Wrapper;
 ?>
 
 <?php get_template_part('templates/head'); ?>
-  <body <?php body_class(); ?>>
+  <?php
+    $background = get_field('eg_default_site_background_img','options');
+    $stylestring = 'style="background-image: url(' . $background['url'] . '); "';
+  ?>
+  <body <?php body_class(); ?> <?= $stylestring; ?>>
     <!--[if lt IE 9]>
       <div class="alert alert-warning">
         <?php _e('You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.', 'sage'); ?>

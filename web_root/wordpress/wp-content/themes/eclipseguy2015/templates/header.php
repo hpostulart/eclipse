@@ -1,7 +1,8 @@
 <?php
 
-  $background = get_template_directory_uri() . "/dist/images/header-sample-bg.jpg";
-  $stylestring = 'style="background: black url(' . $background . '); background-size: cover; background-position: top center;"';
+  // $background = get_template_directory_uri() . "/dist/images/header-sample-bg.jpg";
+  $background = get_field('eg_default_site_header_img','options');
+  $stylestring = 'style="background: black url(' . $background['url'] . '); background-size: cover; background-position: top center;"';
 ?>
 
 <header class="banner" role="banner" <?= $stylestring; ?>>
