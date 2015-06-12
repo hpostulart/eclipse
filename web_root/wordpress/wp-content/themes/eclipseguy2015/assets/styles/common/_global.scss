@@ -121,8 +121,8 @@ h2{
     h3{
       margin-top: 0;
       margin-bottom: 5px;
-      font-size: 1.6rem;
-
+      font-size: 1.8rem;
+      color: $brand-primary !important;
     }
 
     img{
@@ -138,7 +138,7 @@ h2{
     &:hover{
       cursor: pointer;
       h3{
-
+        color: darken($brand-primary,10%) !important;
       }
       img{
         opacity: .8;
@@ -299,4 +299,52 @@ h2{
 
   }
 
+}
+
+
+.page{
+  .entry-content{
+    @extend .clearfix;
+    padding: 15px;
+    background: rgba(0,0,0,0.3);
+  }
+}
+
+.single-post{
+  article{
+    padding: 15px;
+    background: rgba(0,0,0,0.3);
+
+    .entry-content{
+      img{
+        @extend .img-responsive-grow;
+        margin-top: 30px;
+      }
+    }
+  }
+
+  section.comments{
+    border-top: 1px dotted $brand-secondary;
+    margin-top: 30px;
+    padding-top: 30px;
+    h2{
+      margin-top: 0;
+      margin-bottom: 15px;
+      font-size: 1.8rem;
+    }
+  }
+
+  .comment-list{
+    article{
+      background: none;
+      border: 1px solid rgba($brand-secondary,.2);
+      margin-bottom: 10px;
+
+      // img{
+      //   display: inline-block;
+      //   width: auto !important;
+      //   height: auto !important;
+      // }
+    }
+  }
 }
