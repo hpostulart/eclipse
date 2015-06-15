@@ -3,7 +3,7 @@
     "title": "Trip Report Content",
     "fields": [
         {
-            "key": "field_55679ce5375e4",
+            "key": "field_557f5a635daca",
             "label": "Use Wide Format?",
             "name": "eg_trip_wide_format",
             "type": "true_false",
@@ -94,6 +94,7 @@
     "instruction_placement": "label",
     "hide_on_screen": [
         "permalink",
+        "the_content",
         "custom_fields",
         "discussion",
         "comments",
@@ -106,5 +107,5 @@
         "tags",
         "send-trackbacks"
     ],
-    "modified": 1432853745
+    "modified": 1434409609
 }
