@@ -1,6 +1,6 @@
 {
     "key": "group_555b80c7dc8e0",
-    "title": "Frontpage Video",
+    "title": "Homepage Content Config",
     "fields": [
         {
             "key": "field_555b80cd69d6a",
@@ -17,6 +17,57 @@
             },
             "width": "",
             "height": ""
+        },
+        {
+            "key": "field_559a470e7fe96",
+            "label": "Selected Media Header",
+            "name": "ep_selected_media_header",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Selected Eclipse Media",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": "",
+            "readonly": 0,
+            "disabled": 0
+        },
+        {
+            "key": "field_559a47b98520e",
+            "label": "Selected Media",
+            "name": "ep_selected_media",
+            "type": "relationship",
+            "instructions": "Please select which media you'd like to feature on the homepage. You can rearrange added media by dragging+dropping to alter their order.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "post_type": [
+                "reports",
+                "post",
+                "videos"
+            ],
+            "taxonomy": [],
+            "filters": [
+                "search",
+                "post_type"
+            ],
+            "elements": [
+                "featured_image"
+            ],
+            "min": 3,
+            "max": "",
+            "return_format": "object"
         }
     ],
     "location": [
@@ -34,5 +85,5 @@
     "label_placement": "top",
     "instruction_placement": "label",
     "hide_on_screen": "",
-    "modified": 1432060343
+    "modified": 1436174259
 }

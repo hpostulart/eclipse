@@ -41,3 +41,10 @@ function my_class_names( $classes ) {
   // return the $classes array
   return $classes;
 }
+
+//disable WP post formats
+add_action( 'after_setup_theme', 'remove_post_formats', 11 );
+function remove_post_formats() {
+   remove_theme_support( 'post-formats' );
+    // add_theme_support( 'post-formats', array( 'link', 'gallery' ) );
+}

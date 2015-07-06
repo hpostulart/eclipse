@@ -1,0 +1,52 @@
+{
+    "key": "group_559a495ecc080",
+    "title": "Supersize post in masonry-style listings",
+    "fields": [
+        {
+            "key": "field_559a4a05573b3",
+            "label": "Supersize this post within masonry-block-style listings?",
+            "name": "ep_supersize_post_in_listing",
+            "type": "true_false",
+            "instructions": "Set whether (or not) to display this post larger than other posts when shown within masonry-block-style media listings.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "reports"
+            }
+        ],
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "videos"
+            }
+        ],
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "post"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "modified": 1436175591
+}

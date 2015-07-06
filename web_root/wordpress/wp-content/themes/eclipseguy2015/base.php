@@ -8,9 +8,11 @@ use Roots\Sage\Wrapper;
 <?php get_template_part('templates/head'); ?>
   <?php
     $background = get_field('eg_default_site_background_img','options');
-    $stylestring = 'style="background-image: url(' . $background['url'] . '); "';
+    $stylestring = 'style="background-image: url(' . $background['url'] . '); position: relative;"';
+    $default_background_fade = get_field('ep_default_site_background_opacity','options');
   ?>
   <body <?php body_class(); ?> <?= $stylestring; ?>>
+  <div class="opacitator-body" style="opacity:<?= $default_background_fade; ?>; background:black;position:absolute;top:0;right:0;bottom:0;left:0;"></div>
     <!--[if lt IE 9]>
       <div class="alert alert-warning">
         <?php _e('You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.', 'sage'); ?>

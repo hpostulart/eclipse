@@ -64,13 +64,15 @@ body.trip-wide{
   @include make-md-column(9);
   margin-bottom: 50px;
 
-  h3{
-    margin-top: 0;
+  .entry-content{
+      img{
+        @extend .img-responsive-grow;
+        margin-top: 30px;
+      }
   }
 
-  img{
-    @extend .img-responsive-grow;
-    margin-top: 30px;
+  h3{
+    margin-top: 0;
   }
 
   .trip-report-section{
@@ -99,3 +101,22 @@ body.trip-wide{
   @extend .hidden-xs;
 }
 
+
+
+.back-to-listing{
+  height: 35px;
+  display: block;
+  background: $brand-secondary;
+  color: white;
+  text-transform: uppercase;
+  text-align: center;
+  margin-top: 35px;
+  margin-bottom: 35px;
+  line-height: 35px;
+  font-size: 20px;
+
+  &:hover{
+    background: darken($brand-secondary,10%);
+    color:white;
+  }
+}

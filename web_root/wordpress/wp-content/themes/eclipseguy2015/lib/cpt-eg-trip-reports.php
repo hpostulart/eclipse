@@ -30,7 +30,7 @@ function register_reports() {
     'capability_type' => 'page',
     'hierarchical' => true,
     'menu_position' => 10,
-    'supports' => array('title','editor','thumbnail','custom-fields','page-attributes','excerpt'),
+    'supports' => array('title','editor','thumbnail','custom-fields','page-attributes','excerpt','comments'),
     'rewrite' => array(
           'slug' => 'reports',
           'with_front' => false

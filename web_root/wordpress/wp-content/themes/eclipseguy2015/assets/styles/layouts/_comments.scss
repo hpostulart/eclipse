@@ -1,0 +1,69 @@
+section.comments{
+  padding: 5px;
+  border: 1px solid rgba(darken($brand-secondary,30%),.5);
+  @extend .ep-panel-bg-dark;
+
+  h2{
+    text-align: center;
+    padding: 10px;
+    // @include ep-panel-bg();
+    margin-bottom: 5px;
+    margin-top: 0;
+  }
+
+  .comment-list{
+    margin-bottom: 5px;
+  }
+
+  img.avatar{
+    width: 60px!important;
+    height: 60px!important;
+    margin-right: 10px;
+  }
+
+  li.comment{
+    @include ep-panel-bg();
+    padding: 10px;
+    position: relative;
+    margin-bottom: 5px;
+
+    .comment-meta{
+      position: relative;
+      margin-bottom: 10px;
+
+      .comment-metadata{
+        display: block;
+        position: absolute;
+        top: 0px;
+        left: 70px;
+        color: blue;
+      }
+    }
+  }
+
+  .comment-author.vcard{
+    // vertical-align: bottom;
+    margin-top: 0px;
+
+    b.fn,
+    span.says{
+      display: inline-block;
+      // background: red;
+      vertical-align: bottom;
+    }
+  }
+
+  #respond{
+    padding: 10px;
+    // @include ep-panel-bg();
+    @extend .ep-panel-bg-dark;
+
+    .form-submit{
+      margin-bottom: 4px;
+    }
+  }
+}
+
+
+
+

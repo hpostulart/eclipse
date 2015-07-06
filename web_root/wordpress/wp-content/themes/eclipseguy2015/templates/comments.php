@@ -24,12 +24,18 @@ if (post_password_required()) {
         </ul>
       </nav>
     <?php endif; ?>
+
+
   <?php endif; // have_comments() ?>
 
   <?php if (!comments_open() && get_comments_number() != '0' && post_type_supports(get_post_type(), 'comments')) : ?>
     <div class="alert alert-warning">
       <?php _e('Comments are closed.', 'sage'); ?>
     </div>
+  <?php elseif( !comments_open() && is_user_logged_in() ): ?>
+      <div class="alert alert-warning">
+        <?php _e('ADMIN NOTICE: Comments are disabled for this report... are you sure that is what you want? If not, please enable comments in the edit screen.', 'sage'); ?>
+      </div>
   <?php endif; ?>
 
   <?php comment_form(); ?>

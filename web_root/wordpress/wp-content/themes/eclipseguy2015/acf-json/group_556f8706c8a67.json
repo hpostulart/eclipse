@@ -27,6 +27,29 @@
             "mime_types": ""
         },
         {
+            "key": "field_559a4ff9118ad",
+            "label": "Fade Site Header",
+            "name": "ep_default_site_header_opacity",
+            "type": "number",
+            "instructions": "Please select an fade value between 1 (totally black) and 1 (image totally visible) for the header. \r\n\r\neg.: 50% fade = 0.5",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": 1,
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "min": 0,
+            "max": 1,
+            "step": ".05",
+            "readonly": 0,
+            "disabled": 0
+        },
+        {
             "key": "field_556f873cb7fc6",
             "label": "Default Site Background Image",
             "name": "eg_default_site_background_img",
@@ -49,6 +72,29 @@
             "max_height": "",
             "max_size": "",
             "mime_types": ""
+        },
+        {
+            "key": "field_559a50d07d52a",
+            "label": "Default Site Background Fade",
+            "name": "ep_default_site_background_opacity",
+            "type": "number",
+            "instructions": "Please select an fade value between 1 (totally black) and 1 (image totally visible) for the background. \r\n\r\neg.: 50% fade = 0.5",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": 1,
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "min": 0,
+            "max": 1,
+            "step": ".05",
+            "readonly": 0,
+            "disabled": 0
         }
     ],
     "location": [
@@ -66,6 +112,5 @@
     "label_placement": "top",
     "instruction_placement": "label",
     "hide_on_screen": "",
-    "modified": 1434409527,
-    "local": "json"
+    "modified": 1436178524
 }

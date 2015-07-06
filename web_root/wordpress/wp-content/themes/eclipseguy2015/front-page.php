@@ -1,8 +1,9 @@
 <?php while (have_posts()) : the_post(); ?>
 
   <?php
-    // get_template_part('templates/content', 'page');
+    $selected_media_header = get_field('ep_selected_media_header');
   ?>
+
 
   <div class="row">
     <div class="col-sm-12">
@@ -14,7 +15,8 @@
 
   <div class="row">
     <div class="col-sm-12">
-      <h2 class="centered"><?= __('Selected Eclipse Media','eg'); ?></h2>
+
+      <h2 class="centered"><?= __( $selected_media_header,'eg'); ?></h2>
     </div>
   </div>
 
@@ -22,14 +24,14 @@
 
     <div class="masonrywrapper" >
       <?php
-        $args = array(
-          "post_type"        =>  array( 'post', 'videos', 'reports' ),
-          "posts_per_page"   => 24,
-          "order"            => 'desc'
-        );
+        // $args = array(
+        //   "post_type"        =>  array( 'post', 'videos', 'reports' ),
+        //   "posts_per_page"   => 24,
+        //   "order"            => 'desc'
+        // );
       ?>
 
-      <?php get_template_part("templates/content","masonry-listing"); ?>
+      <?php get_template_part("templates/content","masonry-listing-home"); ?>
     </div>
   </div>
 <?php endwhile; ?>

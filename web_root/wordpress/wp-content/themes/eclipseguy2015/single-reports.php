@@ -53,7 +53,7 @@
           ?>
       </div>
 
-
+      <a href="/trip-reports" class="back-to-listing"><?= __('« Back To Trip Report Listing','ep'); ?></a>
 
       <footer>
         <?php
