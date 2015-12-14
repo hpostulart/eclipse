@@ -23,9 +23,17 @@
     ?>
     <img src="<?= $thumb_obj[0]; ?>" class="img-responsive-grow" alt="<?= the_title(); ?>">
     <h3><?php the_title(); ?></h3>
+
+    <!-- spit out date -->
     <?php if( $posttype == 'post'): ?>
       <span class="datestring"><?= get_the_date( 'l F j, Y  ', $post->ID ); ?></span>
     <?php endif; ?>
+
+    <!-- spit out duration -->
+    <?php if( $posttype == 'videos'): ?>
+      <span class="datestring duration">Duration: <?= get_field('eg_video_duration'); ?></span>
+    <?php endif; ?>
+
     <div class="listing-item-description">
       <?php
         switch ($posttype) {
