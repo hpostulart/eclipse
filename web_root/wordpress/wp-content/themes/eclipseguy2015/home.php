@@ -7,7 +7,7 @@
   <div class="page-header">
     <div class="row">
       <div class="col-sm-12">
-        <h2 class=""><?= __('News & Musings','eg'); ?></h2>
+        <h2 class=""><?= __('Eclipseguy News','eg'); ?></h2>
       </div>
     </div>
   </div>
