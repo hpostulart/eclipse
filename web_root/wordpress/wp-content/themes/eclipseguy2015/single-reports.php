@@ -6,7 +6,7 @@
   <aside class="trip-report-nav">
     <div id="trip-report-nav-pusher"></div>
     <?php if( have_rows('trip_report_sections') ): ?>
-    <ul>
+    <ul class="report-sidenav-inner" style="display: block;">
       <?php $count = 1; ?>
       <?php while( have_rows('trip_report_sections') ): the_row(); ?>
 
