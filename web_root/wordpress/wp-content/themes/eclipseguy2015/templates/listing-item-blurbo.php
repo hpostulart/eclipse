@@ -7,9 +7,10 @@
     elseif( is_singular('reports' )):
         global $relitem_obj;
         $feat_item = $relitem_obj;
-    elseif( is_singular('post' )):
+    elseif( is_singular('post') || is_archive() || is_home() ):
         global $relitem;
         $feat_item = $relitem;
+
     endif;
 
 ?>

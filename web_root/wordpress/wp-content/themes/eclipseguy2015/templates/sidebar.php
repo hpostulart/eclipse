@@ -6,6 +6,8 @@
 
   <?php
     $related_media = get_field('eg_sidebar_featured_media_items','options');
+    $global_relitem;
+
     foreach($related_media as $relitem):
   ?>
 
