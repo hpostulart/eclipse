@@ -18,6 +18,7 @@
         <a class="inner" href="<?= get_permalink($relitem_obj->ID); ?>">
           <img src="<?= $thumb_obj[0]; ?>" class="img-responsive-grow" alt="<?= the_title(); ?>">
           <h3><?= $relitem_obj->post_title; ?></h3>
+          <?php get_template_part("templates/listing-item-blurbo"); ?>
         </a>
       </div>
 

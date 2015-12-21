@@ -8,11 +8,15 @@
       foreach($relmedia_all as $relitem):
     ?>
 
-    <?php $feat_item = get_post($relitem); ?>
+    <?php
+      global $feat_item;
+      $feat_item = get_post($relitem);
+    ?>
 
     <div class="masonryitem listing-block <?php if($count==3) echo 'feat'; ?>">
       <a class="inner" href="<?= get_permalink($feat_item->ID); ?>">
         <?php
+          global $posttype;
           $posttype = get_post_type( $feat_item );
 
           $thumb_id = get_post_thumbnail_id( $feat_item->ID );
@@ -26,23 +30,12 @@
         ?>
         <img src="<?= $thumb_obj[0]; ?>" class="img-responsive-grow" alt="<?= $feat_item->post_title; ?>">
         <h3><?= $feat_item->post_title; ?></h3>
-        <div class="listing-item-description">
-          <?php
-            switch ($posttype) {
-                case 'reports':
-                    // the_excerpt();
-                    echo eg_get_excerpt_by_id( $feat_item->ID , 99 );
-                    break;
-                case 'videos':
-                    echo get_field('eg_video_description_short',$feat_item->ID);
-                    break;
-                case 'post':
-                    // the_excerpt();
-                    echo eg_get_excerpt_by_id( $feat_item->ID , 99 );
-                    break;
-            }
-          ?>
-        </div>
+
+        <?php
+          get_template_part("templates/listing-item-blurbo");
+        ?>
+
+
         <?php
           switch ($posttype) {
             case 'reports':
