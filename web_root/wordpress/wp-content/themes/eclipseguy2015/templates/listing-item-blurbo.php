@@ -1,7 +1,17 @@
 <?php
-    // echo 'gagagaaa';
-    global $feat_item;
     global $posttype;
+    // var_dump($posttype);
+
+    if (is_singular('videos')):
+        global $feat_item;
+    elseif( is_singular('reports' )):
+        global $relitem_obj;
+        $feat_item = $relitem_obj;
+    elseif( is_singular('post' )):
+        global $relitem;
+        $feat_item = $relitem;
+    endif;
+
 ?>
 
 <div class="listing-item-description">

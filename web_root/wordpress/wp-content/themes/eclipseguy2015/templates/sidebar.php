@@ -10,8 +10,18 @@
   ?>
 
   <?php
+
     // $relitem_obj = get_post($relitem);
     $rel_id = $relitem->ID;
+
+
+    global $relitem_obj;
+    global $posttype;
+
+
+    // $relitem_obj = get_post($relitem);
+    $posttype = get_post_type( $relitem );
+
     $thumb_id = get_post_thumbnail_id( $rel_id );
     $thumb_obj = wp_get_attachment_image_src( $thumb_id, 'masonry-item-img');
   ?>
@@ -20,6 +30,22 @@
     <a class="inner" href="<?= get_permalink($rel_id); ?>">
       <img src="<?= $thumb_obj[0]; ?>" class="img-responsive-grow" alt="<?= the_title(); ?>">
       <h3><?= $relitem->post_title; ?></h3>
+      <?php get_template_part("templates/listing-item-blurbo"); ?>
+
+      <?php
+        switch ($posttype) {
+          case 'reports':
+              $labeltext = __('Trip Report','eg');
+              break;
+          case 'videos':
+              $labeltext = __('Video','eg');
+              break;
+          case 'post':
+              $labeltext = __('Blog Post','eg');
+              break;
+        }
+      ?>
+      <div class="type-label"><?= $labeltext; ?></div>
     </a>
   </div>
 
