@@ -3,6 +3,22 @@
     "title": "Trip Report Content",
     "fields": [
         {
+            "key": "field_5678986a3b9c8",
+            "label": "Fullwidth report?",
+            "name": "eg_trip_wide_format",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0
+        },
+        {
             "key": "field_554d9dec62f9e",
             "label": "Trip Report Sections",
             "name": "trip_report_sections",
@@ -59,7 +75,8 @@
                     "toolbar": "full",
                     "media_upload": 1
                 }
-            ]
+            ],
+            "collapsed": ""
         }
     ],
     "location": [
@@ -89,5 +106,7 @@
         "tags",
         "send-trackbacks"
     ],
-    "modified": 1436170952
+    "active": 1,
+    "description": "",
+    "modified": 1450743943
 }
