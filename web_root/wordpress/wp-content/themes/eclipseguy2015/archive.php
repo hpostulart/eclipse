@@ -7,7 +7,7 @@
   <div class="page-header">
     <div class="row">
       <div class="col-sm-12">
-        <h2 class=""><?= __('Eclipseguy Blog','eg'); ?></h2>
+        <h2 class=""><?= single_cat_title( '', false ); ?></h2>
       </div>
     </div>
   </div>
@@ -25,7 +25,13 @@
       ?>
 
       <?php
-        $loadmore_shortcode = '[ajax_load_more repeater="template_2" post_type="post" category="blog" posts_per_page="5" scroll_distance="200" max_pages="99" button_label="Load More Posts"]';
+        if (is_category( )) {
+          $cat = get_query_var('cat');
+          $cat_obj = get_category($cat);
+          $cat_slug = $cat_obj->slug;
+        }
+
+        $loadmore_shortcode = '[ajax_load_more repeater="template_2" post_type="post" category="'.$cat_slug.'" posts_per_page="5" scroll_distance="200" max_pages="99" button_label="Load More Posts"]';
         echo do_shortcode( $loadmore_shortcode );
       ?>
     </div>
