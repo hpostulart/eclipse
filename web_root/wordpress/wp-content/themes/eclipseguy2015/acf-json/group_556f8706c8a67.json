@@ -31,7 +31,7 @@
             "label": "Fade Site Header",
             "name": "ep_default_site_header_opacity",
             "type": "number",
-            "instructions": "Please select an fade value between 1 (totally black) and 1 (image totally visible) for the header. \r\n\r\neg.: 50% fade = 0.5",
+            "instructions": "Please select an fade value between 0 (totally black) and 1 (image totally visible) for the header. \r\n\r\neg.: 50% fade = 0.5",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -78,7 +78,7 @@
             "label": "Default Site Background Fade",
             "name": "ep_default_site_background_opacity",
             "type": "number",
-            "instructions": "Please select an fade value between 1 (totally black) and 1 (image totally visible) for the background. \r\n\r\neg.: 50% fade = 0.5",
+            "instructions": "Please select an fade value between 0 (totally black) and 1 (image totally visible) for the background. \r\n\r\neg.: 50% fade = 0.5",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -112,5 +112,7 @@
     "label_placement": "top",
     "instruction_placement": "label",
     "hide_on_screen": "",
-    "modified": 1436178524
+    "active": 1,
+    "description": "",
+    "modified": 1450744459
 }
