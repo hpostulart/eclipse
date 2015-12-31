@@ -61,6 +61,9 @@
     <div class="inner">
       <div class="preamble">The next eclipse is in</div>
       <?= do_shortcode('[fergcorp_cdt]'); ?>
+      <div class="preamble">
+        <a style="font-size:15px;margin-top:30px;display:block;" href="/eclipse-calendar/">View the Eclipse Calendar...</a>
+      </div>
     </div>
   </div>
 </section>
