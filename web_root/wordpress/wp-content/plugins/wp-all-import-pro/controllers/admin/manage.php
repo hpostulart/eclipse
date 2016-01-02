@@ -67,6 +67,36 @@ class PMXI_Admin_Manage extends PMXI_Controller_Admin {
 
 		$this->render();
 	}
+
+	/**
+	* delete all posts, media, files, and whatever value was in the 'Unique ID' field
+	*/
+	public function delete_and_edit()
+	{
+		$get = $this->input->get(array(
+			'id' => '',			
+		));
+		if ( ! empty($get['id']) )
+		{
+			$import = new PMXI_Import_Record();
+			$import->getById($get['id']);
+			if ( ! $import->isEmpty() )
+			{
+				$import->deletePosts(false);
+				$options = $import->options;
+				$options['unique_key'] = '';
+				$import->set(array(
+					'options'  => $options,
+					'imported' => 0,
+					'created'  => 0,
+					'updated'  => 0,
+					'skipped'  => 0,
+					'deleted'  => 0
+				))->save();				
+			}
+		}
+		wp_redirect(add_query_arg(array('id' => $import->id, 'action' => 'options'), $this->baseUrl)); die();
+	}
 	
 	/**
 	 * Edit Template
@@ -198,9 +228,24 @@ class PMXI_Admin_Manage extends PMXI_Controller_Admin {
 					$this->errors->add('form-validation', __('This import appears to be using FTP. Unfortunately WP All Import no longer supports the FTP protocol. Please contact <a href="mailto:support@wpallimport.com">support@wpallimport.com</a> if you have any questions.', 'wp_all_import_plugin'));
 				}									
 				elseif ($item->type == 'url'){ // up to date the file from URL
+
+					$filesXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<data><node></node></data>";
+
+					$files = XmlImportParser::factory($filesXML, '/data/node', $item->path, $file)->parse(); $tmp_files[] = $file;	
+
+					foreach ($tmp_files as $tmp_file) { // remove all temporary files created
+						@unlink($tmp_file);
+					}
+
+					$file_to_import = $item->path;
+
+					if ( ! empty($files) and is_array($files) )
+					{
+						$file_to_import = array_shift($files);
+					}
 					
-					$uploader = new PMXI_Upload(trim($item->path), $this->errors);			
-					$upload_result = $uploader->url($item->feed_type);
+					$uploader = new PMXI_Upload(trim($file_to_import), $this->errors);			
+					$upload_result = $uploader->url($item->feed_type, $item->path);
 					if ($upload_result instanceof WP_Error)
 						$this->errors = $upload_result;					
 					else
@@ -217,7 +262,7 @@ class PMXI_Admin_Manage extends PMXI_Controller_Admin {
 				} 
 				elseif ( ! in_array($item->type, array('ftp'))){ // retrieve already uploaded file
 
-					$uploader = new PMXI_Upload(trim($item->path), $this->errors, rtrim(str_replace(basename($item->path), '', $item->path), '/'));			
+					$uploader = new PMXI_Upload(trim($item->path), $this->errors, rtrim(str_replace(basename($item->path), '', wp_all_import_get_absolute_path($item->path)), '/'));			
 					$upload_result = $uploader->upload();					
 					if ($upload_result instanceof WP_Error)
 						$this->errors = $upload_result;					
@@ -275,15 +320,14 @@ class PMXI_Admin_Manage extends PMXI_Controller_Admin {
 			
 			if ( $chunks ) { // xml is valid						
 				
-				if ( ! PMXI_Plugin::is_ajax() and empty(PMXI_Plugin::$session->chunk_number)){
-
+				if ( ! PMXI_Plugin::is_ajax() and empty(PMXI_Plugin::$session->chunk_number)){					
 					// compose data to look like result of wizard steps				
 					$sesson_data = array(						
 						'filePath' => $filePath,
 						'source' => array(
 							'name' => $item->name,
 							'type' => $item->type,						
-							'path' => $item->path,
+							'path' => wp_all_import_get_relative_path($item->path),
 							'root_element' => $item->root_element,
 						),
 						'feed_type' => $item->feed_type,
@@ -327,6 +371,47 @@ class PMXI_Admin_Manage extends PMXI_Controller_Admin {
 
 		$this->render('admin/import/confirm');
 	}
+
+	/*
+	 * Download import file
+	 *
+	 */
+	public function feed(){
+
+		$nonce = (!empty($_REQUEST['_wpnonce'])) ? $_REQUEST['_wpnonce'] : '';
+		if ( ! wp_verify_nonce( $nonce, '_wpnonce-download_feed' ) ) {		    
+		    die( __('Security check', 'wp_all_import_plugin') ); 
+		} else {			
+			
+			$import_id = $this->input->get('id');
+
+			$path = '';
+
+			$import = new PMXI_Import_Record();
+			$import->getbyId($import_id);
+			if ( ! $import->isEmpty()){
+				$path = wp_all_import_get_absolute_path($import->path);
+
+			}					
+
+			if (file_exists($path)) 
+			{
+				if (preg_match('%\W(zip)$%i', trim(basename($path)))){
+					PMXI_download::zip($path);	
+				}
+				elseif(preg_match('%\W(xml)$%i', trim(basename($path)))){
+					PMXI_download::xml($path);
+				}
+				else{
+					PMXI_download::csv($path);
+				}				
+			}
+			else
+			{			
+				wp_redirect(add_query_arg(array('pmxi_nt' => urlencode(__('File does not exists.', 'wp_all_import_plugin'))), $this->baseUrl)); die();
+			}
+		}
+	}
 	
 	/**
 	 * Delete an import
@@ -343,7 +428,10 @@ class PMXI_Admin_Manage extends PMXI_Controller_Admin {
 			
 			do_action('pmxi_before_import_delete', $item, $this->input->post('is_delete_posts'));
 
-			$item->delete( ! $this->input->post('is_delete_posts'));
+			$is_deleted_images = $this->input->post('is_delete_images');
+			$is_delete_attachments = $this->input->post('is_delete_attachments');
+
+			$item->delete( ! $this->input->post('is_delete_posts'), $is_deleted_images, $is_delete_attachments);
 			wp_redirect(add_query_arg('pmxi_nt', urlencode(__('Import deleted', 'wp_all_import_plugin')), $this->baseUrl)); die();
 		}
 		

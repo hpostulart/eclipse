@@ -12,7 +12,7 @@ $l10n = array(
 	'default_error' => 'An error occurred in the upload. Please try again later.',
 	'missing_upload_url' => 'There was a configuration error. Please contact the server administrator.',
 	'upload_limit_exceeded' => 'You may only upload 1 file.',
-	'http_error' => 'HTTP error.',
+	'http_error' => 'HTTP Error: Click here for our <a href="http://www.wpallimport.com/documentation/advanced/troubleshooting/" target="_blank">troubleshooting guide</a>, or ask your web host to look in your error_log file for an error that takes place at the same time you are trying to upload a file.',
 	'upload_failed' => 'Upload failed.',
 	'io_error' => 'IO error.',
 	'security_error' => 'Security error.',
@@ -65,7 +65,12 @@ $l10n = array(
 						<div class="clear"></div>											
 						
 						<div class="wpallimport-import-types">
+							<?php if (empty($_GET['deligate'])): ?>	
 							<h2><?php _e('First, specify how you want to import your data', 'wp_all_import_plugin'); ?></h2>
+							<?php else: ?>
+							<h2 style="margin-bottom: 10px;"><?php _e('First, specify previously exported file', 'wp_all_import_plugin'); ?></h2>
+							<h2 class="wp_all_import_subheadline"><?php _e('The data in this file can be modified, but the structure of the file (column/element names) should not change.', 'wp_all_import_plugin'); ?></h2>
+							<?php endif; ?>
 							<a class="wpallimport-import-from wpallimport-upload-type <?php echo ('upload' == $post['type'] and ! empty($_POST)) ? 'selected' : '' ?>" rel="upload_type" href="javascript:void(0);">
 								<span class="wpallimport-icon"></span>
 								<span class="wpallimport-icon-label"><?php _e('Upload a file', 'wp_all_import_plugin'); ?></span>
@@ -79,7 +84,7 @@ $l10n = array(
 								<span class="wpallimport-icon-label"><?php _e('Use existing file', 'wp_all_import_plugin'); ?></span>
 							</a>
 						</div>
-						
+												
 						<input type="hidden" value="<?php echo $post['type']; ?>" name="type"/>
 
 						<div class="wpallimport-upload-type-container" rel="upload_type">						
@@ -116,16 +121,18 @@ $l10n = array(
 									$files_directory = DIRECTORY_SEPARATOR . PMXI_Plugin::FILES_DIRECTORY . DIRECTORY_SEPARATOR;
 
 									$local_files = array_merge(
-										PMXI_Helper::safe_glob($upload_dir['basedir'] . $files_directory . '*.xml', PMXI_Helper::GLOB_RECURSE),
-										PMXI_Helper::safe_glob($upload_dir['basedir'] . $files_directory . '*.gz', PMXI_Helper::GLOB_RECURSE),
-										PMXI_Helper::safe_glob($upload_dir['basedir'] . $files_directory . '*.zip', PMXI_Helper::GLOB_RECURSE),
-										PMXI_Helper::safe_glob($upload_dir['basedir'] . $files_directory . '*.gzip', PMXI_Helper::GLOB_RECURSE),
-										PMXI_Helper::safe_glob($upload_dir['basedir'] . $files_directory . '*.csv', PMXI_Helper::GLOB_RECURSE),
-										PMXI_Helper::safe_glob($upload_dir['basedir'] . $files_directory . '*.dat', PMXI_Helper::GLOB_RECURSE),
-										PMXI_Helper::safe_glob($upload_dir['basedir'] . $files_directory . '*.psv', PMXI_Helper::GLOB_RECURSE),
-										PMXI_Helper::safe_glob($upload_dir['basedir'] . $files_directory . '*.json', PMXI_Helper::GLOB_RECURSE),
-										PMXI_Helper::safe_glob($upload_dir['basedir'] . $files_directory . '*.txt', PMXI_Helper::GLOB_RECURSE),
-										PMXI_Helper::safe_glob($upload_dir['basedir'] . $files_directory . '*.sql', PMXI_Helper::GLOB_RECURSE)
+										PMXI_Helper::safe_glob($upload_dir['basedir'] . $files_directory . '*.xml', PMXI_Helper::GLOB_NODIR),
+										PMXI_Helper::safe_glob($upload_dir['basedir'] . $files_directory . '*.gz', PMXI_Helper::GLOB_NODIR),
+										PMXI_Helper::safe_glob($upload_dir['basedir'] . $files_directory . '*.zip', PMXI_Helper::GLOB_NODIR),
+										PMXI_Helper::safe_glob($upload_dir['basedir'] . $files_directory . '*.gzip', PMXI_Helper::GLOB_NODIR),
+										PMXI_Helper::safe_glob($upload_dir['basedir'] . $files_directory . '*.csv', PMXI_Helper::GLOB_NODIR),
+										PMXI_Helper::safe_glob($upload_dir['basedir'] . $files_directory . '*.dat', PMXI_Helper::GLOB_NODIR),
+										PMXI_Helper::safe_glob($upload_dir['basedir'] . $files_directory . '*.psv', PMXI_Helper::GLOB_NODIR),
+										PMXI_Helper::safe_glob($upload_dir['basedir'] . $files_directory . '*.json', PMXI_Helper::GLOB_NODIR),
+										PMXI_Helper::safe_glob($upload_dir['basedir'] . $files_directory . '*.txt', PMXI_Helper::GLOB_NODIR),
+										PMXI_Helper::safe_glob($upload_dir['basedir'] . $files_directory . '*.sql', PMXI_Helper::GLOB_NODIR),
+										PMXI_Helper::safe_glob($upload_dir['basedir'] . $files_directory . '*.xls', PMXI_Helper::GLOB_NODIR),
+										PMXI_Helper::safe_glob($upload_dir['basedir'] . $files_directory . '*.xlsx', PMXI_Helper::GLOB_NODIR)
 									);
 									sort($local_files);
 									$sizes = array();
@@ -239,7 +246,10 @@ $l10n = array(
 					<p class="wpallimport-submit-buttons">
 						<input type="hidden" name="custom_type" value="<?php echo $post['custom_type'];?>">
 						<input type="hidden" name="is_submitted" value="1" />
-						<?php wp_nonce_field('choose-file', '_wpnonce_choose-file'); ?>					
+						<input type="hidden" name="auto_generate" value="0" />
+						
+						<?php wp_nonce_field('choose-file', '_wpnonce_choose-file'); ?>		
+						<a href="javascript:void(0);" class="back rad3 auto-generate-template" style="float:none; background: #e4e6e6; padding: 0 50px;"><?php _e('Skip to Step 4', 'wp_all_import_plugin'); ?></a>			
 						<input type="submit" class="button button-primary button-hero wpallimport-large-button" value="<?php _e('Continue to Step 2', 'wp_all_import_plugin') ?>" id="advanced_upload"/>
 					</p>
 					

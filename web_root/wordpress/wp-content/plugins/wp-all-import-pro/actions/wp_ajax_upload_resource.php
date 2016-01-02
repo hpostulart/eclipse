@@ -26,9 +26,24 @@ function pmxi_wp_ajax_upload_resource(){
 
 	if ($post['type'] == 'url'){
 
+		$filesXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<data><node></node></data>";
+
+		$files = XmlImportParser::factory($filesXML, '/data/node', $post['file'], $file)->parse(); $tmp_files[] = $file;	
+
+		foreach ($tmp_files as $tmp_file) { // remove all temporary files created
+			@unlink($tmp_file);
+		}
+
+		$file_to_import = $post['file'];
+
+		if ( ! empty($files) and is_array($files) )
+		{
+			$file_to_import = array_shift($files);
+		}
+
 		$errors = new WP_Error;
-		$uploader = new PMXI_Upload(trim($post['file']), $errors);			
-		$upload_result = $uploader->url();			
+		$uploader = new PMXI_Upload(trim($file_to_import), $errors);			
+		$upload_result = $uploader->url('', $post['file']);			
 
 		if ($upload_result instanceof WP_Error){
 			$errors = $upload_result;
@@ -65,8 +80,7 @@ function pmxi_wp_ajax_upload_resource(){
 			    	if ( ! empty($xml) ) { 
 
 			      		PMXI_Import_Record::preprocessXml($xml);
-			      		$xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" . "\n" . $xml;
-			    	
+			      		$xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" . "\n" . $xml;								    
 				      	$dom = new DOMDocument( '1.0', 'UTF-8' );
 						$old = libxml_use_internal_errors(true);
 						$dom->loadXML($xml);
@@ -103,6 +117,7 @@ function pmxi_wp_ajax_upload_resource(){
 			else {
 				$response['upload_result'] = $upload_result;			
 				$response['filesize'] = filesize($upload_result['filePath']);
+				$response['post_type'] = $upload_result['post_type'];
 			}
 		}
 	} 	

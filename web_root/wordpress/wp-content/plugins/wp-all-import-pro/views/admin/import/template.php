@@ -104,26 +104,30 @@
 					
 				<?php									
 
-					if ( in_array('main', $visible_sections) ) do_action('pmxi_extend_options_main', $post_type);
+					if ( in_array('main', $visible_sections) ) do_action('pmxi_extend_options_main', $post_type, $post);
 
 					if ( in_array('featured', $visible_sections) ) {
-						include( 'template/_featured_template.php' );
-						do_action('pmxi_extend_options_featured', $post_type);						
+						$is_images_section_enabled = apply_filters('wp_all_import_is_images_section_enabled', true, $post_type);						
+						if ( $is_images_section_enabled ) {
+							PMXI_API::add_additional_images_section(__('Images', 'wp_all_import_plugin'), '', $post, $post_type, true, true);
+						}
+							
+						do_action('pmxi_extend_options_featured', $post_type, $post);
 					}
 
 					if ( in_array('cf', $visible_sections) ){ 
 						include( 'template/_custom_fields_template.php' );
-						do_action('pmxi_extend_options_custom_fields', $post_type);																								
+						do_action('pmxi_extend_options_custom_fields', $post_type, $post);																								
 					}
 
 					if ( in_array('taxonomies', $visible_sections) ) {
 						include( 'template/_taxonomies_template.php' );					
-						do_action('pmxi_extend_options_taxonomies', $post_type);												
+						do_action('pmxi_extend_options_taxonomies', $post_type, $post);												
 					}									
 
 					if ( in_array('other', $visible_sections) ){ 
 						include( 'template/_other_template.php' );
-						do_action('pmxi_extend_options_other', $post_type);
+						do_action('pmxi_extend_options_other', $post_type, $post);
 					}
 
 					/*if ( in_array('nested', $visible_sections) ){ 
@@ -131,11 +135,46 @@
 						do_action('pmxi_extend_options_nested', $post_type);
 					}*/
 
-				?>																
+					$uploads = wp_upload_dir();
+					$functions = $uploads['basedir'] . DIRECTORY_SEPARATOR . WP_ALL_IMPORT_UPLOADS_BASE_DIRECTORY . DIRECTORY_SEPARATOR . 'functions.php';
+					$functions_content = file_get_contents($functions);
+
+					?>
+					<div class="wpallimport-collapsed closed wpallimport-section">
+						<div class="wpallimport-content-section">
+							<div class="wpallimport-collapsed-header">
+								<h3><?php _e('Function Editor', 'wp_all_import_plugin'); ?></h3>	
+							</div>
+							<div class="wpallimport-collapsed-content" style="padding: 0;">
+								<div class="wpallimport-collapsed-content-inner">									
+
+									<textarea id="wp_all_import_code" name="wp_all_import_code"><?php echo (empty($functions_content)) ? "<?php\n\n?>": $functions_content;?></textarea>						
+
+									<div class="input" style="margin-top: 10px;">
+
+										<div class="input" style="display:inline-block; margin-right: 20px;">
+											<input type="button" class="button-primary wp_all_import_save_functions" value="<?php _e("Save Functions", 'wp_all_import_plugin'); ?>"/>							
+											<a href="#help" class="wpallimport-help" title="<?php printf(__("Add functions here for use during your import. You can access this file at %s", "wp_all_import_plugin"), preg_replace("%.*wp-content%", "wp-content", $functions));?>" style="top: 0;">?</a>
+											<div class="wp_all_import_functions_preloader"></div>
+										</div>						
+										<div class="input wp_all_import_saving_status" style="display:inline-block;">
+
+										</div>
+
+									</div>
+
+								</div>
+							</div>
+						</div>
+					</div>
 				
 				<hr>
 				
 				<div class="input wpallimport-section" style="padding-bottom: 8px; padding-left: 8px;">
+
+					<?php 
+						wp_all_import_template_notifications( $post, 'notice' );							
+					?>					
 										
 					<p style="margin: 11px; float: left;">
 						<input type="hidden" name="save_template_as" value="0" />

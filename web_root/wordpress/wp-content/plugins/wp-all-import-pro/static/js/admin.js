@@ -155,7 +155,7 @@
 
 		var $wrap = $('.wrap');
 
-		var formHeight = $wrap.height();
+		var formHeight = ($('.wpallimport-layout').height() < 730) ? 730 : $('.wpallimport-layout').height();
 
 		$('#file_selector').ddslick({
 			width: 600,	
@@ -181,15 +181,15 @@
 		$('#custom_type_selector').ddslick({
 			width: 590,	
 			onSlideDownOptions: function(o){		
-				formHeight = $wrap.height();						
+				formHeight = ($('.wpallimport-layout').height() < 730) ? 730 : $('.wpallimport-layout').height();				
 				$wrap.css({'height': formHeight + $('#custom_type_selector').find('.dd-options').height() + 'px'});				
 			},
 			onSlideUpOptions: function(o){						
-				$wrap.css({'height': formHeight + 'px'});				
+				$wrap.css({'height': 'auto'});				
 			},
 			onSelected: function(selectedData){								
 				if (fixWrapHeight)
-					$wrap.css({'height': formHeight + 'px'});				
+					$wrap.css({'height': 'auto'});				
 				else
 					fixWrapHeight = true;
 		        $('input[name=custom_type]').val(selectedData.selectedData.value);		        
@@ -204,10 +204,11 @@
 			$('.change_file').find('.wpallimport-file-upload-result').attr('rel', $(this).attr('rel'));
 			$('.change_file').find('.wpallimport-upload-type-container[rel=' + $(this).attr('rel') + ']').show();
 			$('.change_file').find('#wpallimport-url-upload-status').html('');
-			$('.change_file').find('input[name=new_type]').val( $(this).attr('rel').replace('_type', '') );
+			$('.change_file').find('input[name=new_type]').val( $(this).attr('rel').replace('_type', '') );			
+
 			if ($(this).attr('rel') == 'upload_type'){
 				$('input[type=file]').click();
-			}
+			}			
 		});
 		$('.wpallimport-import-from.selected').click();
 
@@ -237,7 +238,7 @@
 						
 		var $wrap = $('.wrap');
 
-		var formHeight = $wrap.height();
+		var formHeight = ($('.wpallimport-layout').height() < 730) ? 730 : $('.wpallimport-layout').height();
 
 		$('.wpallimport-import-from').click(function(){			
 			
@@ -265,7 +266,16 @@
 			$('.wpallimport-choose-file').find('.wpallimport-file-upload-result').attr('rel', $(this).attr('rel'));
 			$('.wpallimport-choose-file').find('.wpallimport-upload-type-container[rel=' + $(this).attr('rel') + ']').show();
 			$('.wpallimport-choose-file').find('#wpallimport-url-upload-status').html('');
-			$('.wpallimport-choose-file').find('input[name=type]').val( $(this).attr('rel').replace('_type', '') );						
+			$('.wpallimport-choose-file').find('input[name=type]').val( $(this).attr('rel').replace('_type', '') );				
+			
+			if ($('.auto-generate-template').attr('rel') == $(this).attr('rel')){
+				$('.auto-generate-template').css({'display':'inline-block'});
+			}
+			else
+			{
+				$('.auto-generate-template').hide();
+			}			
+
 			if ($(this).attr('rel') == 'upload_type'){
 				$('input[type=file]').click();
 			}
@@ -314,6 +324,25 @@
 							$('.wpallimport-choose-file').find('.wpallimport-submit-buttons').show();						
 						});						
 						$('.wpallimport-choose-file').find('input[name=downloaded]').val(window.JSON.stringify(response.upload_result));
+
+						if (response.post_type)
+						{
+							var index = $('#custom_type_selector li:has(input[value="'+ response.post_type +'"])').index();
+							if (index != -1)
+							{
+								$('#custom_type_selector').ddslick('select', {index: index });
+								$('.auto-generate-template').css({'display':'inline-block'}).attr('rel', 'url_type');
+							}
+							else
+							{
+								$('.auto-generate-template').hide();
+							}
+						}
+						else
+						{
+							$('.auto-generate-template').hide();
+						}
+
 					}
 					else {
 						$('.wpallimport-header').next('.clear').after(response.errors);
@@ -321,9 +350,10 @@
 					$indicator.css({'visibility':'hidden'});
 					ths.removeAttr('disabled');
 				},
-				error: function(request) {							
+				error: function(response) {						
 					$indicator.css({'visibility':'hidden'});
 					ths.removeAttr('disabled');
+					$('.wpallimport-header').next('.clear').after(response.responseText);
 				},			
 				dataType: "json"
 			});
@@ -334,15 +364,15 @@
 		$('#custom_type_selector').ddslick({
 			width: 300,		
 			onSlideDownOptions: function(o){	
-				formHeight = $wrap.height();			
+				formHeight = ($('.wpallimport-layout').height() < 730) ? 730 : $('.wpallimport-layout').height();
 				$wrap.css({'height': formHeight + $('#custom_type_selector').find('.dd-options').height() + 'px'});				
 			},
 			onSlideUpOptions: function(o){
-				$wrap.css({'height' : formHeight + 'px'});				
+				$wrap.css({'height' : 'auto'});				
 			},		
 			onSelected: function(selectedData){					
 				if (fixWrapHeight)
-					$wrap.css({'height' : formHeight + 'px'});									
+					$wrap.css({'height' : 'auto'});									
 				else
 					fixWrapHeight = true;
 
@@ -410,6 +440,11 @@
 		$('#custom_type_selector').hide();
 
 		$('.wpallimport-import-to.wpallimport-import-to-checked').click();		
+
+		$('a.auto-generate-template').click(function(){
+			$('input[name^=auto_generate]').val('1');					
+			$(this).parents('form:first').submit();
+		});
 		
 	});
 	//[/End Step 1]		
@@ -562,12 +597,15 @@
 
 		$form.find('.preview, .preview_images, .preview_taxonomies, .preview_prices').click(function () {
 			var $preview_type = $(this).attr('rel');
+			var $options_slug = $(this).parent('div').find('.wp_all_import_section_slug').val();
 
 			if ($preview_type == 'preview_taxonomies') serialize_ctx_mapping();
 
 			var $URL = 'admin.php?page=pmxi-admin-import&action=' + $preview_type + ((typeof import_id != "undefined") ? '&id=' + import_id : '');
 			var $tagURL = 'admin.php?page=pmxi-admin-import&action=tag' + ((typeof import_id != "undefined") ? '&id=' + import_id : '');
 			
+			if ($options_slug != undefined) $URL += '&slug=' + $options_slug;
+
 			$('.wpallimport-overlay').show();
 			
 			var $ths = $(this);	
@@ -594,7 +632,7 @@
 
 	        $pointer.css({'position':'fixed', 'top' : '15%', 'left' : $leftOffset + 'px'});
 
-			if (tinyMCE != undefined) tinyMCE.triggerSave(false, false);
+			if (typeof tinyMCE != 'undefined') tinyMCE.triggerSave(false, false);
 
 			$.post($URL, $form.serialize(), function (response) {
 							
@@ -1185,8 +1223,11 @@
 						$('#pmxi_xml_element').append(response.render_element);
 						$('.wpallimport-root-element').html(response.root_element);
 						$('.wpallimport-elements-count-info').html(response.count);
-						if (response.count) 
-							$submit.show();
+						$('.wp_all_import_warning').hide(); 
+						if (response.count){ 
+							$submit.show();							
+							if ($('.xml-element.lvl-1').length < 1) $('.wp_all_import_warning').css({'display':'inline-block'});
+						}
 						else
 							$submit.hide();
 					}
@@ -1360,7 +1401,7 @@
 						filter += ' < %s';
 						break;
 					case 'equals_or_less':
-						filter += ' =< %s';
+						filter += ' <= %s';
 						break;
 					case 'contains':
 						filter += '[contains(.,"%s")]';
@@ -1480,7 +1521,7 @@
 	// [/xml representation dynamic]
 	
 	$('.wpallimport-custom-fields').each(function(){		
-		$(this).find('.autocomplete').each(function(){
+		$(this).find('.wp_all_import_autocomplete').each(function(){
 			if ( ! $(this).parents('tr:first').hasClass('template')){
 				$(this).autocomplete({
 					source: eval('__META_KEYS'),
@@ -1734,6 +1775,11 @@
 				}
 			});
 		});
+		var $uniqueKey = $form.find('input[name=unique_key]');
+		var $tmpUniqueKey = $form.find('input[name=tmp_unique_key]');
+		$form.find('.wpallimport-auto-detect-unique-key').click(function(){
+			$uniqueKey.val($tmpUniqueKey.val());
+		});
 	});
 	
 	// chunk files upload
@@ -1749,12 +1795,11 @@
 			browse_button : 'select-files',
 			file_data_name : 'async-upload',
 			flash_swf_url : plugin_url + '/static/js/plupload/plupload.flash.swf',
-			silverlight_xap_url : plugin_url + '/static/js/plupload/plupload.silverlight.xap',
-		
+			silverlight_xap_url : plugin_url + '/static/js/plupload/plupload.silverlight.xap',		
 			multipart: false,
 			max_file_size: '1000mb',
 			chunk_size: '1mb',			
-			drop_element: 'plupload-ui'
+			drop_element: 'plupload-ui'				
 		});
 	}	
 
@@ -1885,6 +1930,95 @@
 		$(this).hide();        
 	});	
 
+	if ($('#wp_all_import_code').length){
+		var editor = CodeMirror.fromTextArea(document.getElementById("wp_all_import_code"), {
+	        lineNumbers: true,
+	        matchBrackets: true,
+	        mode: "application/x-httpd-php",
+	        indentUnit: 4,
+	        indentWithTabs: true
+	    });
+	    editor.setCursor(1);
+	}
+
+    $('.wp_all_import_save_functions').click(function(){
+    	var request = {
+			action: 'save_import_functions',	
+			data: editor.getValue(),				
+			security: wp_all_import_security				
+	    };    
+	    $('.wp_all_import_functions_preloader').show();
+	    $('.wp_all_import_saving_status').html('');
+		$.ajax({
+			type: 'POST',
+			url: ajaxurl + ((typeof export_id != "undefined") ? '?id=' + import_id : ''),
+			data: request,
+			success: function(response) {						
+				$('.wp_all_import_functions_preloader').hide();
+				
+				if (response.result)
+				{
+					$('.wp_all_import_saving_status').css({'color':'green'});
+					setTimeout(function() {
+						$('.wp_all_import_saving_status').html('').fadeOut();
+					}, 3000);
+				}
+				else
+				{
+					$('.wp_all_import_saving_status').css({'color':'red'});
+				}
+
+				$('.wp_all_import_saving_status').html(response.msg).show();
+									
+			},
+			error: function( jqXHR, textStatus ) {						
+				$('.wp_all_import_functions_preloader').hide();
+			},
+			dataType: "json"
+		});
+    }); 
+
+    $('.wp_all_import_ajax_deletion').click(function(e){
+    	e.preventDefault();
+    	var $ths = $(this);
+    	$(this).attr('disabled', 'disabled');
+    	var request = {
+			action: 'delete_import',	
+			data: $(this).parents('form:first').serialize(),				
+			security: wp_all_import_security				
+	    };    	    
+	    var iteration = 1;
+		var deleteImport = function(){
+			$.ajax({
+				type: 'POST',
+				url: ajaxurl + '?iteration=' + iteration,
+				data: request,
+				success: function(response) {		
+					
+					iteration++;
+
+					$ths.parents('form:first').find('.wp_all_import_deletion_log').html('<p>' + response.msg + '</p>');
+
+					if (response.result){																												
+						$('.wp_all_import_functions_preloader').hide();
+						window.location.href = response.redirect;
+					}
+					else
+					{						
+						deleteImport();
+					}
+				},
+				error: function( jqXHR, textStatus ) {						
+					$ths.removeAttr('disabled');
+					$('.wp_all_import_functions_preloader').hide();
+				},
+				dataType: "json"
+			});
+		}
+		$('.wp_all_import_functions_preloader').show();
+		deleteImport();
+    });
+
 	$('.wpallimport-collapsed').each(function(){
 
 		if ( ! $(this).hasClass('closed')) $(this).find('.wpallimport-collapsed-content:first').slideDown();
@@ -1895,13 +2029,32 @@
 		var $parent = $(this).parents('.wpallimport-collapsed:first');
 		if ($parent.hasClass('closed')){			
 			$parent.removeClass('closed');
-			$parent.find('.wpallimport-collapsed-content:first').slideDown();
+			$parent.find('.wpallimport-collapsed-content:first').slideDown(400, function(){
+				if ($('#wp_all_import_code').length) editor.setCursor(1);
+			});
 		}
 		else{
 			$parent.addClass('closed');			
 			$parent.find('.wpallimport-collapsed-content:first').slideUp();
 		}
 	});	
+
+	$('#is_delete_posts').change(function(){
+		if ($(this).is(':checked')){
+			$('.wpallimport-delete-posts-warning').show();
+		}
+		else{
+			$('.wpallimport-delete-posts-warning').hide();
+		}
+	});
+
+	$('.wpallimport-dependent-options').each(function(){
+		$(this).prev('div.input').find('input[type=text]:last, textarea:last').addClass('wpallimport-top-radius');
+	});
+
+	$('.wpallimport-delete-and-edit').click(function(){
+    	window.location.href = $(this).attr('rel');
+    });    
 
 	var fix_tag_position = function(){
 		if ($('.wpallimport-layout').length && $('.tag').length){

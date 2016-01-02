@@ -5,7 +5,7 @@ function pmxi_admin_notices() {
 	$uploads = wp_upload_dir();	
 
 	// compare woocommerce add-on version	
-	if ( class_exists( 'PMWI_Plugin' ) and ( defined('PMWI_VERSION') and version_compare(PMWI_VERSION, '2.0.0-beta1') < 0 and PMWI_EDITION == 'paid' or defined('PMWI_FREE_VERSION') and version_compare(PMWI_FREE_VERSION, '1.1.4') <= 0 and PMWI_EDITION == 'free') ) {
+	if ( class_exists( 'PMWI_Plugin' ) and ( defined('PMWI_VERSION') and version_compare(PMWI_VERSION, '2.1.3 RC5') < 0 and PMWI_EDITION == 'paid' or defined('PMWI_FREE_VERSION') and version_compare(PMWI_FREE_VERSION, '1.2.1') <= 0 and PMWI_EDITION == 'free') ) {
 		?>
 		<div class="error"><p>
 			<?php printf(
@@ -19,9 +19,14 @@ function pmxi_admin_notices() {
 		{
 			deactivate_plugins( PMWI_ROOT_DIR . '/wpai-woocommerce-add-on.php');
 		}
-		else 
+		else
 		{	
-			deactivate_plugins( PMWI_FREE_ROOT_DIR . '/plugin.php');		
+			if (defined('PMWI_FREE_ROOT_DIR')){ 
+				deactivate_plugins( PMWI_FREE_ROOT_DIR . '/plugin.php');		
+			}
+			else{
+				deactivate_plugins( PMWI_ROOT_DIR . '/plugin.php');		
+			}
 		}
 		
 	}
@@ -127,4 +132,5 @@ function pmxi_admin_notices() {
 			endif;
 		}
 	}	
+	wp_all_import_addon_notifications();	
 }

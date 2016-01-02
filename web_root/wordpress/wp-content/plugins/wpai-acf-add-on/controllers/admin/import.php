@@ -17,9 +17,9 @@ class PMAI_Admin_Import extends PMAI_Controller_Admin {
 		$this->data['id'] = $id = $this->input->get('id');
 
 		$this->data['import'] = $import = new PMXI_Import_Record();			
-		if ( ! $id or $import->getById($id)->isEmpty()) { // specified import is not found
+		if ( ! $id or $import->getById($id)->isEmpty()) { // specified import is not found			
 			$post = $this->input->post(			
-				$default			
+				(isset(PMXI_Plugin::$session->options) ? PMXI_Plugin::$session->options : array()) + $default
 			);
 		}
 		else 

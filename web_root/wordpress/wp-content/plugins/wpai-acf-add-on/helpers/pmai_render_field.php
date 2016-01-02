@@ -69,8 +69,11 @@ if ( ! function_exists('pmai_render_field')){
 						break;					
 					case 'gallery':
 						?>
-						<input type="text" placeholder="" value="<?php echo esc_attr( $current_field );?>" name="fields<?php echo $field_name;?>[<?php echo $field['key'];?>]" class="text w95 widefat rad4"/>
-						<a href="#help" class="wpallimport-help" title="<?php _e('Specify image URLs, separated by commas.', 'pmxi_plugin'); ?>" style="top:0;">?</a>
+						<div class="input">
+							<label><?php _e('Enter image URL one per line, or separate them with a', 'pmxi_plugin'); ?> </label>
+							<input type="text" style="width:5%; text-align:center;" value="<?php echo (!empty($current_field['delim'])) ? esc_attr( $current_field['delim'] ) : '';?>" name="fields<?php echo $field_name;?>[<?php echo $field['key'];?>][delim]" class="small rad4">
+							<textarea placeholder="http://example.com/images/image-1.jpg" style="clear: both; display: block; margin-top: 10px;" class="newline rad4" name="fields<?php echo $field_name;?>[<?php echo $field['key'];?>][gallery]"><?php echo ( ! is_array($current_field)) ? esc_attr($current_field) : esc_attr( $current_field['gallery'] );?></textarea>			
+						</div>
 						<?php
 						break;					
 					case 'color_picker':					
@@ -367,7 +370,7 @@ if ( ! function_exists('pmai_render_field')){
 										<div class="input">
 											<p>
 												<?php printf(__("For each %s do ..."), '<input type="text" name="fields' . $field_name . '[' . $field["key"] . '][foreach]" value="'. $current_field["foreach"] .'" class="pmai_foreach widefat rad4"/>'); ?>											
-												<a href="http://www.wpallimport.com/documentation/advanced-custom-fields/repeaters/" target="_blank"><?php _e('(documentation)', 'pmxi_plugin'); ?></a>
+												<a href="http://www.wpallimport.com/documentation/advanced-custom-fields/repeater-fields/" target="_blank"><?php _e('(documentation)', 'pmxi_plugin'); ?></a>
 											</p>
 										</div>
 									</div>

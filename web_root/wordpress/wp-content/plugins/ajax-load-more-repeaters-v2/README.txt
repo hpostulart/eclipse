@@ -5,10 +5,10 @@ Author: Darren Cooney
 Author URI: http://connekthq.com/
 Plugin URI: http://connekthq.com/ajax-load-more/custom-repeaters/
 Requires at least: 3.6.1
-Tested up to: 4.1
+Tested up to: 4.2.2
 Stable tag: trunk
 Homepage: http://connekthq.com/ajax-load-more/
-Version: 2.3
+Version: 2.3.1
 
 == Copyright ==
 Copyright 2015 Darren Cooney, Connekt Media
@@ -47,6 +47,9 @@ http://connekthq.com/ajax-load-more/custom-repeaters/
 
 
 == Changelog ==
+
+= 2.3.1 =
+* UPDATE - Updating plugin update script. Users are now required to input a license key to receive updates directly within the WP Admin. Please contact us for information regarding legacy license keys.
 
 = 2.3 =
 * Adding functionality required for the Ajax Load More v2.5.0 update. 

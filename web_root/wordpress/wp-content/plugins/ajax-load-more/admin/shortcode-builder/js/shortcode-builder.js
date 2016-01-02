@@ -17,17 +17,14 @@ jQuery(document).ready(function($) {
    */  
    _alm.select2 = function(){
       // Default Select2
-      $('.row select, .cnkt-main select, select.jump-menu').not('.multiple').select2({});   
+      $('.row select, .cnkt-main select, select.jump-menu').not('.multiple, .meta-compare, .meta-type').select2({});   
       
       // multiple
       $('.ajax-load-more .categories select.multiple').select2({
-         placeholder : 'Select Categories',
+         placeholder : '-- Select Categories --',
       });     
       $('.ajax-load-more .tags select.multiple').select2({
-         placeholder : 'Select Tags'         
-      });    
-      $('.ajax-load-more.settings select.multiple.post-types').select2({
-         placeholder : 'Select Post Types'         
+         placeholder : '-- Select Tags --'         
       });
    };
    _alm.select2();
@@ -43,7 +40,106 @@ jQuery(document).ready(function($) {
       $('.ajax-load-more .categories select.multiple').select2();     
       $('.ajax-load-more .tags select.multiple').select2();
    };   
+            
+     
+            
+   //    
+   var total_tax_query = 0,
+   	 max_tax_query = 2;
+   $('#add-tax-query').on('click', function(e){
+      e.preventDefault();
+      
+      if(total_tax_query < 2){
+      	total_tax_query++;
+			$('#tax-query-relation').fadeIn(250);
+			$('.ajax-load-more .taxonomy-wrap').eq(total_tax_query - 1).fadeIn(250);
+			
+			if(total_tax_query === 2){ // Hide "Add" button if 3 $('.taxonomy-wrap')
+	         $('#alm-taxonomy .controls button').addClass('disabled');  
+	      }
+      
+      }else{
+         alert("Sorry - maximum of 3 tax_query objects.");
+         return false;
+      }
+      
+   });   
+   
+   /* Delete Tax Query */
+   $(document).on('click', '.remove-tax-query', function(e){
+      var el = $(this),
+      	 parent = el.parent('.taxonomy-wrap');
+          
+	   $('select', parent).select2('val', '').trigger('change');
+      total_tax_query--;
+      parent.addClass('removing');
+      parent.fadeOut(250, function(){ 	  
+         _alm.buildShortcode();  
+         parent.removeClass('removing');       
+      });      
+      
+      if(total_tax_query < 2){ // Show "Add" button if less than 3
+         $('#alm-taxonomy .controls button').removeClass('disabled'); 
+      }
+      
+      if(total_tax_query == 0){
+			$('#tax-query-relation').fadeOut(250);	      
+      }
+      
+   });
+      
+           
               
+              
+   // Add additional meta_query
+   var meta_query_obj = $('.meta-query-wrap').eq(0).clone();
+   $('.meta-query-wrap .remove').remove();
+   $('select.meta-compare, select.meta-type').select2();
+   $('#add-meta-query').on('click', function(e){
+      e.preventDefault();
+      
+      if($('.meta-query-wrap').length > 3){
+         alert("Sorry - maximum of 4 meta_query objects.");
+         return false;
+      }
+      
+      var target = $('#meta-query-extended');
+      $('input, select', meta_query_obj).val('');
+      var el = meta_query_obj.clone().hide();    
+      target.append(el);
+      el.fadeIn(250);
+      $('#meta-query-extended select').select2();
+      
+      if($('.meta-query-wrap').length > 1){
+         $('#meta-query-relation').fadeIn(250);
+      }else{
+         $('#meta-query-relation').fadeOut(250);         
+      }
+      
+      $('select.meta-compare').select2();
+      
+      if($('.meta-query-wrap').length > 3){ // Hide "Add" button if 4 $('.meta-query-wrap')
+         $('#alm-meta-key .controls button').addClass('disabled'); 
+      }
+      
+   });   
+   
+   /* Delete Meta Query */
+   $(document).on('click', '.remove-meta-query', function(e){
+      var el = $(this);
+      el.parent('.meta-query-wrap').addClass('removing');
+      el.parent('.meta-query-wrap').fadeOut(250, function(){
+         el.parent('.meta-query-wrap').remove();
+         _alm.buildShortcode();
+      });
+      
+      if($('.meta-query-wrap').length > 3){ // Show "Add" button if less than 4 $('.meta-query-wrap')
+         $('#alm-meta-key .controls button').removeClass('disabled');  
+      }
+      
+   });
+   
+   
    
    
    /*
@@ -56,11 +152,10 @@ jQuery(document).ready(function($) {
    _alm.buildShortcode = function(){
       output = '[ajax_load_more';    
       
-      
       // ---------------------------
       // - Cache      
-      // ---------------------------
-      
+      // ---------------------------     
+       
       var cache = $('#alm-cache input[name=cache]:checked').val(); 
       if(cache !== 'false' && cache != undefined){
          if($('input#cache-id').val() === '')
@@ -77,8 +172,77 @@ jQuery(document).ready(function($) {
       
       
       // ---------------------------
+      // - Comments      
+      // ---------------------------     
+      
+      var comments = $('#alm-comments input[name=comments]:checked').val();
+      if(comments === undefined){	
+         comments = false;
+      }      
+      
+      if(comments === 'true'){	  
+         var comments_post_id = $('#comments_post_id').val(),
+             comments_per_page = $('#comments-per-page').val(),
+             comments_type = $('#comments_type').val(),   
+             comments_template = $('#comments_template').val(),
+             comments_callback = $('#comments_callback').val().trim(),
+             comments_style = $('#alm-comments input[name=alm_comment_style]:checked').val(); 
+             
+         if(comments_callback !== ''){
+            $('#comments_template').select2('val','none');
+         }
+         
+         output += ' comments="'+comments+'"';                
+         output += ' comments_post_id="\'.'+comments_post_id+'.\'"';
+         
+         if(comments_type !== 'comment')
+            output += ' comments_type="'+comments_type+'"';
+         
+         if(comments_per_page !== '5')
+            output += ' comments_per_page="'+comments_per_page+'"';
+         
+         if(comments_style !== 'ol')   
+            output += ' comments_style="'+comments_style+'"';
+         
+         if(comments_template !== 'none')   
+            output += ' comments_template="'+comments_template+'"'; 
+         
+         if(comments_callback !== '')   
+            output += ' comments_callback="'+comments_callback+'"'; 
+             
+         $('.comments_extras').slideDown(100, 'alm_easeInOutQuad');                   
+      }else{
+         $('.comments_extras').slideUp(100, 'alm_easeInOutQuad');
+      }
+      
+      
+      
+      // ---------------------------
+      // - PAGING      
+      // ---------------------------     
+      
+      var paging = $('#alm-paging input[name=paging]:checked').val();
+      var paging_controls = $('#alm-paging input[name=paging-controls]:checked').val(); 
+      var paging_show_at_most = $('#alm-paging input#show-at-most').val(); 
+      var paging_classes = $('#alm-paging input#paging-classes').val(); 
+      if(paging !== 'false' && paging != undefined){	      
+         output += ' paging="'+paging+'"';             
+         output += ' paging_controls="'+paging_controls+'"';
+         output += ' paging_show_at_most="'+paging_show_at_most+'"'; 
+         if(paging_classes !== ''){
+            output += ' paging_classes="'+paging_classes+'"';             
+         }         
+         $('#nav-controls').slideDown(100, 'alm_easeInOutQuad');                   
+      }else{
+         $('#nav-controls').slideUp(100, 'alm_easeInOutQuad');
+      }      
+      
+      
+      
+      // ---------------------------
       // - Preload      
       // ---------------------------
+      
       var seo = $('.seo input[name=seo]:checked').val();
       var preload = $('.preload input[name=preload]:checked').val(); 
       if(preload !== 'false' && preload != undefined){
@@ -92,7 +256,31 @@ jQuery(document).ready(function($) {
             output += ' preloaded_amount="'+preload_amount+'"';  
       }else{
          $('.preload_amount').slideUp(100, 'alm_easeInOutQuad');
-      }    
+      } 
+      
+      
+      
+      // ---------------------------
+      // - Previous Post      
+      // ---------------------------
+      
+      var previous = $('.previous-post input[name=prev-post]:checked').val();
+      if(previous !== 'false' && previous != undefined){   
+              
+         var prev_post_id = $('#prev_post_id').val(),
+             previous_post_taxonomy = $('#pp-taxonomy-select').val();
+         $('.prev_post_id').slideDown(100, 'alm_easeInOutQuad');
+                  
+         output += ' previous_post="'+previous+'"'; 
+         output += ' previous_post_id="\'.'+prev_post_id+'.\'"'; 
+         
+         if(previous_post_taxonomy !== '' )
+            output += ' previous_post_taxonomy="'+previous_post_taxonomy+'"'; 
+         
+      }else{
+         $('.prev_post_id').slideUp(100, 'alm_easeInOutQuad');
+      }   
+      
       
       
       // ---------------------------
@@ -106,34 +294,50 @@ jQuery(document).ready(function($) {
          output += ' seo="'+seo+'"';                   
       }
       
+      
+      
       // ---------------------------
       // - Repeater
       // ---------------------------
       
-      var repeater = $('.repeater select').val(); 
-      if(repeater != '' && repeater != undefined && repeater != 'default') 
-         output += ' repeater="'+repeater+'"';
+      var repeater = $('select#repeater-select').val(),
+      	 theme_repeater = $('select#theme-repeater-select').val();
+      	 
+      if(theme_repeater != 'null' && theme_repeater != '' && theme_repeater != undefined){
+	      output += ' theme_repeater="'+theme_repeater+'"';
+      }else{
+	      if(repeater != '' && repeater != undefined && repeater != 'default'){
+		      output += ' repeater="'+repeater+'"';      
+	      }	      
+      }  
       
       
+         
       // ---------------------------
       // - Post Types
       // ---------------------------
       
-      var post_type_count = 0;
-      $('.post_types input[type=checkbox]').each(function(e){         
-         if($(this).is(":checked")) {
-            post_type_count++;
-            if(post_type_count>1){
-               output += ', ' + $(this).data('type');
-            }else{
-               if($(this).hasClass('changed')){
-                  output += ' post_type="'+$(this).data('type')+''; 
-               }              
+      if(comments === 'false' || comments === false || comments === undefined){ // Hide post_types if comments is active
+         
+         var post_type_count = 0;
+         $('.post_types input[type=checkbox]').each(function(e){         
+            if($(this).is(":checked")) {
+               post_type_count++;
+               if(post_type_count>1){
+                  output += ', ' + $(this).data('type');
+               }else{
+                  if($(this).hasClass('changed')){
+                     output += ' post_type="'+$(this).data('type')+''; 
+                  }              
+               }
             }
-         }
-      }); 
-      if(post_type_count>0) 
-         output += '"';
+         }); 
+         if(post_type_count>0){ 
+            output += '"';
+         }           
+      }
+      
+      
         
       // ---------------------------
       // - Post Format
@@ -173,43 +377,133 @@ jQuery(document).ready(function($) {
          output += ' tag__not_in="'+tag_not_in+'"';
          
          
+         
       // ---------------------------
       // - Taxonomy Query     
       // ---------------------------
       
-      var tax = $('select#taxonomy-select').val(),
-      	  tax_operator = $('#tax-operator-select input[name=tax-operator]:checked').val();      	  
-      	          
-      if(tax !== '' && tax !== undefined){
-         output += ' taxonomy="'+tax+'"';
-         if($('select#taxonomy-select').hasClass('changed')){         	
-         	$('#taxonomy-extended').slideDown(200, 'alm_easeInOutQuad');
-         	get_tax_terms(tax);
+      var tax1 = $.trim($('select#taxonomy-select').val()),
+      	 tax_operator1 = $.trim($('#tax-operator-select input[name=tax-operator]:checked').val()),
+      	 tax2 = $.trim($('select#taxonomy-select2').val()),
+      	 tax_operator2 = $.trim($('#tax-operator-select2 input[name=tax-operator2]:checked').val()),
+      	 tax3 = $.trim($('select#taxonomy-select3').val()),
+      	 tax_operator3 = $.trim($('#tax-operator-select3 input[name=tax-operator3]:checked').val()),
+      	 tax_relation = $.trim($('#tax-query-relation select[name=tax-relation]').val());    
+      	   	  
+      var parent1 = $('select#taxonomy-select').parent('.taxonomy'),
+      	 parent2 = $('select#taxonomy-select2').parent('.taxonomy'),
+      	 parent3 = $('select#taxonomy-select3').parent('.taxonomy'); 
+      
+      var has_tax1 = false,
+      	 taxonomy1_terms = '';        
+      if(tax1 !== '' && tax1 !== undefined){  
+	            
+         has_tax1 = true;
+         if($('select#taxonomy-select').hasClass('changed')){
+	         $('select#taxonomy-select').parent()         	
+         	$('.taxonomy-extended', parent1).fadeIn(150, 'alm_easeInOutQuad');
+         	get_tax_terms(tax1, parent1, '1');
          	$('select#taxonomy-select').removeClass('changed');
          }
          
-		var tax_term_count = 0;
-		$('#tax-terms-container input[type=checkbox]').each(function(e){         
-			if($(this).is(":checked")) {
-				tax_term_count++;
-				if(tax_term_count>1){
-					output += ', ' + $(this).data('type');
-				}else{
-				if($('#tax-terms-container input').hasClass('changed'))
-					output += ' taxonomy_terms="'+$(this).data('type')+'';               
+			var tax_term_count1 = 0;
+			$('#tax-terms-container1 input[type=checkbox]').each(function(e){         
+				if($(this).is(":checked")) {
+					tax_term_count1++;
+					if(tax_term_count1 > 1){
+						taxonomy1_terms += ', ' + $(this).data('type');
+					}else{
+					if($('#tax-terms-container1 input').hasClass('changed'))
+						taxonomy1_terms += $(this).data('type');               
+					}
 				}
-			}
-		}); 
-		if(tax_term_count>0) 
-		 output += '"';
-         
-         //Get Tax Operator
-         if(tax_operator !== '' && tax_operator !== 'IN' && tax_operator !== undefined && tax_term_count !== 0){
-	        output += ' taxonomy_operator="'+tax_operator+'"';
-         }         
-      }else{
-	      $('#taxonomy-extended').slideUp(200, 'alm_easeInOutQuad');
+			});        
       }
+      else{
+	      $('.taxonomy-extended', parent1).fadeOut(150, 'alm_easeInOutQuad');
+      }
+      
+      
+		var has_tax2 = false,
+			 taxonomy2_terms = ''; 
+      if(tax2 !== '' && tax2 !== undefined){ 
+	           
+         has_tax2 = true;
+         if($('select#taxonomy-select2').hasClass('changed')){
+	         $('select#taxonomy-select2').parent()         	
+         	$('.taxonomy-extended', parent2).fadeIn(200, 'alm_easeInOutQuad');
+         	get_tax_terms(tax2, parent2, '2');
+         	$('select#taxonomy-select2').removeClass('changed');
+         }
+         
+			var tax_term_count2 = 0;
+			$('#tax-terms-container2 input[type=checkbox]').each(function(e){         
+				if($(this).is(":checked")) {
+					tax_term_count2++;
+					if(tax_term_count2 > 1){
+						taxonomy2_terms += ', ' + $(this).data('type');
+					}else{
+					if($('#tax-terms-container2 input').hasClass('changed'))
+						taxonomy2_terms += $(this).data('type');               
+					}
+				}
+			});       
+      }
+      else{
+	      $('.taxonomy-extended', parent2).fadeOut(150, 'alm_easeInOutQuad');
+      }
+      
+      
+      var has_tax3,
+      	 taxonomy3_terms = ''; 
+      if(tax3 !== '' && tax3 !== undefined){      
+         
+         has_tax3 = true;
+         if($('select#taxonomy-select3').hasClass('changed')){
+	         $('select#taxonomy-select3').parent()         	
+         	$('.taxonomy-extended', parent3).fadeIn(200, 'alm_easeInOutQuad');
+         	get_tax_terms(tax3, parent3, '3');
+         	$('select#taxonomy-select3').removeClass('changed');
+         }
+         
+			var tax_term_count3 = 0;
+			$('#tax-terms-container3 input[type=checkbox]').each(function(e){         
+				if($(this).is(":checked")) {
+					tax_term_count3++;
+					if(tax_term_count3 > 1){
+						taxonomy3_terms += ', ' + $(this).data('type');
+					}else{
+					if($('#tax-terms-container3 input').hasClass('changed'))
+						taxonomy3_terms += $(this).data('type');               
+					}
+				}
+			});     
+      }
+      else{
+	      $('.taxonomy-extended', parent3).fadeOut(150, 'alm_easeInOutQuad');
+      }      
+      
+      
+      if(has_tax1 && !has_tax2 && !has_tax3){
+	      output += ' taxonomy="'+tax1+'"'; 
+	      output += ' taxonomy_terms="'+taxonomy1_terms+'"'; 
+	      output += ' taxonomy_operator="'+tax_operator1+'"'; 
+	   }
+	   if(has_tax1 && has_tax2 && !has_tax3){
+	      output += ' taxonomy="'+tax1+':'+tax2+'"'; 
+	      output += ' taxonomy_terms="'+taxonomy1_terms+':'+taxonomy2_terms+'"'; 
+	      output += ' taxonomy_operator="'+tax_operator1+':'+tax_operator2+'"';  
+	      if(tax_relation !== 'AND')
+	         output += ' taxonomy_relation="'+tax_relation;
+	   }
+	   if(has_tax1 && has_tax2 && has_tax3){
+	      output += ' taxonomy="'+tax1+':'+tax2+':'+tax3+'"'; 
+	      output += ' taxonomy_terms="'+taxonomy1_terms+':'+taxonomy2_terms+':'+taxonomy3_terms+'"'; 
+	      output += ' taxonomy_operator="'+tax_operator1+':'+tax_operator2+':'+tax_operator3+'"'; 
+	      if(tax_relation !== 'AND')
+	         output += ' taxonomy_relation="'+tax_relation;
+	   }
+      
 
       
       // ---------------------------
@@ -229,6 +523,84 @@ jQuery(document).ready(function($) {
       var dateD = $('.date input#input-day').val(); // Day          
       if(dateD  !== '' && dateD  !== undefined && dateD < 32) 
          output += ' day="'+dateD+'"';   
+         
+         
+      
+      // ---------------------------
+      // - Custom Fields Meta Query
+      // ---------------------------
+      var meta_key = $.trim($('.meta-query-wrap').eq(0).find('input.meta-key').val()),
+          meta_value = $.trim($('.meta-query-wrap').eq(0).find('input.meta-value').val()),
+          meta_compare = $('.meta-query-wrap').eq(0).find('select.meta-compare').val(),
+          meta_type = $('.meta-query-wrap').eq(0).find('select.meta-type').val(),
+          meta_relation = $('select.meta-relation').val(),
+          meta_query_length = $('.meta-query-wrap').length;          
+
+      // Set meta_compare default value
+      if(meta_compare === '' || meta_compare == undefined)       
+          meta_compare = '=';   
+     
+      // Set meta_type default value
+      if(meta_type === '' || meta_type == undefined)       
+          meta_type = 'CHAR';
+      
+      // Single Meta_Query()    
+      if(meta_query_length === 1){
+	      if(meta_key !== '' && meta_key !== undefined){      	         	         	
+	         output += ' meta_key="'+meta_key+'"';
+	         output += ' meta_value="'+meta_value+'"';
+	         
+	         if(meta_compare !== '='){
+	            output += ' meta_compare="'+meta_compare+'"';              
+	         }
+	         
+	         if(meta_type !== 'CHAR'){
+	            output += ' meta_type="'+meta_type+'"';              
+	         }
+	      }
+      }
+      // Multiple Meta_Query()
+      if(meta_query_length > 1){
+	      meta_key = ''; 
+	      meta_value = ''; 
+	      meta_compare = ''; 
+	      meta_type = ''; 
+	      $('.meta-query-wrap').each(function(e){
+		      var el = $(this),
+		      	 mk = $.trim(el.find('input.meta-key').val()),
+		      	 mv = $.trim(el.find('input.meta-value').val()),
+		      	 mc = $.trim(el.find('select.meta-compare').val()),
+		      	 mt = $.trim(el.find('select.meta-type').val());
+		      
+		      if(e === 0){ // first on first only	 
+		      	meta_key += mk;
+		      	meta_value += mv;
+		      	meta_compare += mc;
+		      	meta_type += mt;
+		      }else{			
+   		      if(mk.length > 0 && mv.length > 0){     
+		      	   meta_key += ':'+ mk;
+		      	   meta_value += ':'+ mv;
+		      	   meta_compare += ':'+ mc;
+		      	   meta_type += ':'+ mt;
+		      	}
+		      }
+		      
+	      });
+	      output += ' meta_key="'+meta_key+'"';
+	      output += ' meta_value="'+meta_value+'"';
+	      output += ' meta_compare="'+meta_compare+'"';
+	      output += ' meta_type="'+meta_type+'"';
+	      
+	      var isRelation = $('#meta-query-relation').css("display");
+	      if(meta_relation !== '' && meta_relation !== undefined && isRelation === 'block'){
+	         output += ' meta_relation="'+meta_relation+'"';
+	      }
+	      
+      }else{
+         $('#meta-query-relation').fadeOut(150);
+      }
+      
       
       
       // ---------------------------
@@ -261,7 +633,7 @@ jQuery(document).ready(function($) {
          if(exclude.charAt( exclude.length-1 ) == ",") {
             exclude = exclude.slice(0, -1)
          }
-         output += ' exclude="'+exclude+'"';  
+         output += ' post__not_in="'+exclude+'"';  
       }  
       
       
@@ -285,33 +657,6 @@ jQuery(document).ready(function($) {
          output += ' custom_args="'+custom_args+'"'; 
       
       
-      // ---------------------------
-      // - Meta Key
-      // ---------------------------
-      var meta_key = $.trim($('input#meta-key').val()),
-          meta_value = $.trim($('input#meta-value').val()),
-          meta_compare = $('select#meta-compare').val();
-     
-      // Set meta_compare default value
-      if(meta_compare === '' || meta_compare == undefined)       
-          meta_compare = '=';
-          
-      if(meta_key !== '' && meta_key !== undefined){
-         if($('input#meta-key').hasClass('changed')){         	
-         	$('#meta-query-extended').slideDown(200, 'alm_easeInOutQuad');
-         	         	
-            output += ' meta_key="'+meta_key+'"';
-            output += ' meta_value="'+meta_value+'"';
-            
-            if(meta_compare !== '=')
-               output += ' meta_compare="'+meta_compare+'"';
-         }
-      }else{
-	      $('#meta-query-extended').slideUp(200, 'alm_easeInOutQuad');
-	      $('input#meta-key').removeClass('changed');
-      } 
-         
-          
       // ---------------------------
       // - Ordering      
       // ---------------------------
@@ -354,8 +699,9 @@ jQuery(document).ready(function($) {
       // ---------------------------
       
       var pause_load = $('.pause_load input[name=pause]:checked').val();     
-      if(pause_load === 't')          
-            output += ' pause="true"';       
+      if(pause_load === 't'){          
+         output += ' pause="true"'; 
+      }         
             
       
       
@@ -365,17 +711,24 @@ jQuery(document).ready(function($) {
       
       var scroll_load = $('.scroll_load input[name=scroll]:checked').val();     
       if(scroll_load === 'f'){
-         $('.max_pages, .scroll_distance').slideUp(100, 'alm_easeInOutQuad');
+         $('.max_pages, .scroll_distance, .pause_override').slideUp(100, 'alm_easeInOutQuad');
          if($('.scroll_load input').hasClass('changed'))          
             output += ' scroll="false"';         
       }else{
-         $('.max_pages, .scroll_distance').slideDown(100, 'alm_easeInOutQuad');
+         $('.max_pages, .scroll_distance, .pause_override').slideDown(100, 'alm_easeInOutQuad');
+         
          var scroll_distance = $('.scroll_distance input').val();      
          if(scroll_distance != 150)           
             output += ' scroll_distance="'+$('.scroll_distance input').val()+'"';   
+            
          var max_pages = $('.max_pages input').val();   
          if(max_pages != 5)           
-            output += ' max_pages="'+$('.max_pages input').val()+'"';            
+            output += ' max_pages="'+$('.max_pages input').val()+'"';  
+            
+         var pause_override = $('.pause_override input[name=pause_override]:checked').val();  
+         if(pause_override === 't' && pause_load === 't')           
+            output += ' pause_override="true"';  
+                   
       }        
 
       
@@ -386,6 +739,15 @@ jQuery(document).ready(function($) {
       var transition = $('.transition input[name=transition]:checked').val(); 
       if(transition !== 'slide')
          output += ' transition="'+transition+'"';
+      
+      
+      // ---------------------------
+      // - Images loaded      
+      // ---------------------------
+      
+      var images_loaded = $('.images_loaded input[name=images_loaded]:checked').val();     
+      if(images_loaded === 't')          
+            output += ' images_loaded="true"';
 
       
       // ---------------------------
@@ -401,10 +763,35 @@ jQuery(document).ready(function($) {
       // - Button Label      
       // ---------------------------
       
-      var btn_lbl = $('.btn-label input').val();    
-      btn_lbl = $.trim(btn_lbl);       
-      if(btn_lbl !== '' && $('.btn-label input').hasClass('changed')) 
-         output += ' button_label="'+btn_lbl+'"';        
+      var button_label = $('.btn-label input#button-label').val().trim(),
+          button_loading_label = $('.btn-label input#button-loading-label').val().trim(); 
+      
+      if(button_label !== '' && button_label !== 'Older Posts') 
+         output += ' button_label="'+button_label+'"';  
+      
+      if(button_loading_label !== '')    
+         output += ' button_loading_label="'+button_loading_label+'"';  
+         
+      
+      
+      
+      // ---------------------------
+      // - Container Type      
+      // ---------------------------
+      
+      var container_type = $('.container_type input[name=alm_container_type]:checked').val(); 
+      if(container_type)
+         output += ' container_type="'+container_type+'"';
+      
+      
+      // ---------------------------
+      // - Container Classes      
+      // ---------------------------
+      
+      var container_classes = $('.alm-classes input#container-classes').val();    
+      container_classes = $.trim(container_classes);       
+      if(container_classes !== '' && $('.alm-classes input#container-classes').hasClass('changed')) 
+         output += ' css_classes="'+container_classes+'"';        
       
       
       output += ']';  //Close shortcode          
@@ -429,13 +816,28 @@ jQuery(document).ready(function($) {
    $('.seo input[type=radio]#seo-false').prop('checked', true).addClass('changed'); 
    
    
-   $(document).on('change keyup', '.alm_element', function() {      
-      $(this).addClass('changed');      
+   $(document).on('change keyup', '.alm_element', function() {     
+	   var el = $(this); 
+      el.addClass('changed');     
+      
+      // reset repeater templates 
+		if(el.attr('id') === 'repeater-select'){
+			$('select#theme-repeater-select').select2('val','');
+		}	
+		if(el.attr('id') === 'theme-repeater-select'){
+			if($('#theme-repeater-select').val() !== 'null' && $('#theme-repeater-select').val() !== ''){
+				$('select#repeater-select').select2('val','default');
+			}
+		}	
+		
+		if(el.attr('id') === 'comments_template'){
+			$('#comments_callback').val('');
+		}	
 
       // If post type is not selected, select 'post'.
       if(!$('.post_types input[type=checkbox]:checked').length > 0){
          $('.post_types input[type=checkbox]#chk-post').prop('checked', true);
-      } 
+      }       
       
       // If Tax Term Operator is not selected, select 'IN'.
       if(!$('#tax-operator-select input[type=radio]:checked').length > 0){
@@ -499,6 +901,7 @@ jQuery(document).ready(function($) {
    
 	
 	/* Table of Contents */
+	
 	$('.table-of-contents .toc').append('<option value="#">-- Jump to Option --</option>');
 	$('.table-of-contents .toc').append(jumpOptions).select2();	
 	
@@ -511,6 +914,8 @@ jQuery(document).ready(function($) {
 		}
    });
    
+   /* Table of Contents - onResize */
+   
    function almResizeTOC(){      
       var tocW = $('.cnkt-sidebar').width();
       $('.table-of-contents').css('width', tocW + 'px'); 
@@ -519,8 +924,7 @@ jQuery(document).ready(function($) {
    
    $(window).resize(function() {
       almResizeTOC() 
-   });
-   
+   });   
    
    $(window).scroll(function(){
       almSidebarAttach();
@@ -545,21 +949,22 @@ jQuery(document).ready(function($) {
    *
    *  @since 2.1.0
    */
-   function get_tax_terms(tax){
-   		var placement = $('#tax-terms-container');
+   function get_tax_terms(tax, parent, index){
+   		var placement = $('.tax-terms-container', parent);
    		placement.html("<p class='loading'>Fetching Terms...</p>");
+   	
 		$.ajax({
 			type: 'GET',
-			url: window.parent.alm_admin_localize.ajax_admin_url,
+			url: alm_admin_localize.ajax_admin_url,
 			data: {
 				action: 'alm_get_tax_terms',
 				taxonomy: tax,
-				nonce: window.parent.alm_admin_localize.alm_admin_nonce,
+				index: index,
+				nonce: alm_admin_localize.alm_admin_nonce,
 			},
 			dataType: "html",
-			success: function(data) {			
-				//console.log(data);
-				placement.html(data);
+			success: function(data) {	
+				placement.html(data);		
 			},
 			error: function(xhr, status, error) {
 				responseText.html('<p>Error - Something went wrong and the terms could not be retrieved.');
@@ -622,6 +1027,8 @@ jQuery(document).ready(function($) {
    $(document).on('click', '.reset-shortcode-builder a', function(){
       $('#alm-shortcode-builder-form').trigger("reset");
       _alm.reset_select2();
+      //total_tax_query = 0;
+      //$('.ajax-load-more .taxonomy-wrap').hide();
       _alm.buildShortcode();
    }); 
    
@@ -636,8 +1043,7 @@ jQuery(document).ready(function($) {
    
    _alm.generateUniqueID = function(length) {
        var id = Math.floor(Math.pow(10, length-1) + Math.random() * 9 * Math.pow(10, length-1));
-       $('#cache-id').val(id);
-       
+       $('#cache-id').val(id);     
    }
    
    
