@@ -85,6 +85,22 @@ a:hover{
   text-decoration: none;
 }
 
+
+.wrap{
+  a:visited{
+    color: $color-link-visited !important;
+    h3{
+      color: $color-link-visited !important;
+      &:hover{
+        color: $brand-primary !important;
+      }
+    }
+    &:hover{
+      color: $brand-primary !important;
+    }
+  }
+}
+
 h1,h2,h3,h4,h5{
   &.centered{
     text-align: center;
