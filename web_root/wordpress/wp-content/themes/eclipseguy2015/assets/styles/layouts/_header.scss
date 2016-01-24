@@ -44,3 +44,88 @@ header.banner{
     }
   }
 }
+
+
+
+
+// MOBILE ----------------------------
+
+header#header-global{
+  @media (max-width: $screen-xs-max){
+    height: 200px;
+    min-height: 200px;
+    .brand{
+      display: block;
+      position: relative;
+      top: auto;
+      left: auto;
+      width: auto;
+      margin-top: 30px;
+
+      img{
+        @extend .img-responsive;
+      }
+    }
+  }
+}
+
+.nav-mobile{
+  position: absolute;
+  top: -40px;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  background: #222;
+
+
+  min-height: 40px;
+
+  .navtoggle-wrap{
+    position: relative;
+    // height: 40px;
+    text-align: right;
+
+    a{
+      position: relative;
+      width: 32px;
+      display: inline-block;
+      margin-right: 15px;
+      margin-top: 6px;
+      color: #aaa;
+
+      &:hover{
+        color: $brand-primary;
+      }
+
+      i{
+        position: relative;
+        font-size: 26px;
+        display: block;
+      }
+
+    }
+  }
+
+  #navcontent-mobile{
+    background: #1c1c1c;
+    margin-top: 5px;
+
+    ul{
+      margin: 0 -15px;
+      border-top: 1px solid #000;
+      li{
+        border-bottom: 1px solid #333;
+        a{
+          color: #aaa;
+          text-transform: uppercase;
+
+
+          &:hover{
+            color: $brand-primary;
+            background: #333;
+          }
+        }
+      }
+    }
+  }
+}

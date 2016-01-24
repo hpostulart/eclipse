@@ -6,15 +6,30 @@
   $default_header_fade = get_field('ep_default_site_header_opacity','options');
 ?>
 
-<header class="banner" role="banner" <?= $stylestring; ?>>
+<header id="header-global" class="banner" role="banner" <?= $stylestring; ?>>
   <div class="opacitator-header" style="opacity:<?= $default_header_fade; ?>; background:black;position:absolute;top:0;right:0;bottom:0;left:0;"></div>
 
   <div class="container">
     <a class="brand" href="<?= esc_url(home_url('/')); ?>"><img src="<?= get_template_directory_uri(); ?>/dist/images/eg-logo-total.png"></a>
   </div>
 
-  <nav role="navigation" class="nav-main">
-    <div class="container">
+  <!-- MOBILE -->
+  <nav role="navigation" class="nav-mobile visible-xs">
+    <div class="navtoggle-wrap"><a data-toggle="collapse" data-target="#navcontent-mobile" href="#" class="navtoggle"><i class="fa fa-bars"></i></a></div>
+    <div class="collapse" id="navcontent-mobile">
+      <div class="container">
+        <?php
+        if (has_nav_menu('primary_navigation')) :
+          wp_nav_menu(['theme_location' => 'primary_navigation', 'menu_class' => 'nav']);
+        endif;
+        ?>
+      </div>
+    </div>
+  </nav>
+
+  <!-- DESKTOP -->
+  <nav role="navigation" class="nav-main hidden-xs clearfix">
+    <div class="container clearfix">
       <?php
       if (has_nav_menu('primary_navigation')) :
         wp_nav_menu(['theme_location' => 'primary_navigation', 'menu_class' => 'nav']);
