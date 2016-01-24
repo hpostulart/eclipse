@@ -82,4 +82,30 @@
   $(document).ready(UTIL.loadEvents);
 
 
+
+
+
+
+
+
+  // eclipseguy scripts! ---------------------------------------------------
+
+
+  // fix CPT parent page highlighting when deeper in CPT section
+
+  if ($("body").hasClass("single-reports")) {   // single-products is the name of my template page for the custom post type
+    $("li.menu-item-3156").removeClass("current_page_parent");   // Removes the class current_page_parent from the <li> with the page-id of the Blog (News)
+    $("li.menu-item-3169").addClass("current_page_parent");   // Adds the class current_page_parent to the <li> with the page-id of the Products page
+  }
+
+  if ($("body").hasClass("single-videos")) {   // single-products is the name of my template page for the custom post type
+    $("li.menu-item-3156").removeClass("current_page_parent");   // Removes the class current_page_parent from the <li> with the page-id of the Blog (News)
+    $("li.menu-item-3152").addClass("current_page_parent");   // Adds the class current_page_parent to the <li> with the page-id of the Products page
+  }
+
+  if ($("body").hasClass("category-blog")) {   // single-products is the name of my template page for the custom post type
+    $("li.menu-item-3156").removeClass("current_page_parent");   // Removes the class current_page_parent from the <li> with the page-id of the Blog (News)
+    // $("li.menu-item-3169").addClass("current_page_parent");   // Adds the class current_page_parent to the <li> with the page-id of the Products page
+  }
+
 })(jQuery); // Fully reference jQuery after this point.

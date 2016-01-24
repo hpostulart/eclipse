@@ -30,7 +30,8 @@ header.banner{
       display: inline-block;
       width: auto;
 
-      &.current-menu-item{
+      &.current-menu-item,
+      &.current_page_parent{
         background: $brand-primary;
         a{
           color: white;
