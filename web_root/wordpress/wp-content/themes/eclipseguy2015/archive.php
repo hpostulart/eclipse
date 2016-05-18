@@ -29,7 +29,7 @@
           $cat = get_query_var('cat');
           $cat_obj = get_category($cat);
           $cat_slug = $cat_obj->slug;
-          var_dump($cat_slug);
+          // var_dump($cat_slug);
         }
 
         $loadmore_shortcode = '[ajax_load_more repeater="template_2" post_type="post" category="'.$cat_slug.'" posts_per_page="5" scroll_distance="200" max_pages="99" button_label="Load More Posts"]';
