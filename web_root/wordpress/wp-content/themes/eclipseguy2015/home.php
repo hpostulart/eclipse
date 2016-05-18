@@ -14,10 +14,12 @@
 
   <!-- <div class="row"> -->
     <div class="linearwrapper" >
+
+
       <?php
         $args = array(
           // "post_type"        => 'post',
-          // "posts_per_page"   => 12,
+           // "posts_per_page"   => 5,
           // "order"            => 'desc'
         );
 
@@ -25,7 +27,9 @@
       ?>
 
       <?php
-        $loadmore_shortcode = '[ajax_load_more repeater="template_2" post_type="post" posts_per_page="5" scroll_distance="200" max_pages="99" button_label="Load More Posts"]';
+        $loadmore_shortcode = '[ajax_load_more repeater="template_2" category__not_in="24" post_type="post" posts_per_page="5" scroll_distance="200" max_pages="99" button_label="Load More Posts"]';
+
+
         echo do_shortcode( $loadmore_shortcode );
       ?>
     </div>
