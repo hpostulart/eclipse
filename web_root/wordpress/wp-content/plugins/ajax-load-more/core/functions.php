@@ -12,9 +12,9 @@
 function alm_get_current_repeater($repeater, $type) {
 	$template = $repeater;
 	$include = '';
+		
 	// If is Custom Repeaters (Custom Repeaters v1)
-	if( $type == 'repeater' && has_action('alm_repeater_installed' ))
-	{ 
+	if( $type == 'repeater' && has_action('alm_repeater_installed' )){ 
 		$include = ALM_REPEATER_PATH . 'repeaters/'. $template .'.php';      					
 		
 		if(!file_exists($include)) //confirm file exists        			
@@ -22,24 +22,22 @@ function alm_get_current_repeater($repeater, $type) {
 		
 	}
    // If is Unlimited Repeaters (Custom Repeaters v2)
-	elseif( $type == 'template_' && has_action('alm_unlimited_installed' ))
-	{
+	elseif( $type == 'template_' && has_action('alm_unlimited_installed' )){
 		global $wpdb;
 		$blog_id = $wpdb->blogid;
 		
 		if($blog_id > 1){	
 			$include = ALM_UNLIMITED_PATH. 'repeaters/'. $blog_id .'/'.$template .'.php';
 		}else{
-			$include = ALM_UNLIMITED_PATH. 'repeaters/'.$repeater .'.php';		
-		}   					
-		
+			$include = ALM_UNLIMITED_PATH. 'repeaters/'.$template .'.php';		
+		}   		
+				
 		if(!file_exists($include)) //confirm file exists        			
-		   alm_get_default_repeater(); 			
+		   $include = alm_get_default_repeater(); 			
 	
 	}
 	// Default repeater
-	else
-	{				
+	else{				
 		$include = alm_get_default_repeater();
 	}
 	
@@ -59,8 +57,7 @@ function alm_get_current_repeater($repeater, $type) {
 function alm_get_default_repeater() {
 	global $wpdb;
 	$file = null;
-	$template_dir = 'alm_templates';
-	
+	$template_dir = 'alm_templates';	
 	
 	// Allow user to load template from theme directory
 	// Since 2.8.5
@@ -118,6 +115,7 @@ function alm_get_taxonomy($taxonomy, $taxonomy_terms, $taxonomy_operator){
 		return $args;
 	}
 }
+
 
 
 /*
@@ -295,15 +293,26 @@ function alm_get_tax_query($post_format, $taxonomy, $taxonomy_terms, $taxonomy_o
 *  @since 2.5.0
 */
 function alm_get_meta_query($meta_key, $meta_value, $meta_compare, $meta_type){
-   if(!empty($meta_key) && !empty($meta_value)){ 
+   if(!empty($meta_key)){ 
       
       $meta_values = alm_parse_meta_value($meta_value, $meta_compare); 
-      $return = array(
-         'key' => $meta_key,
-         'value' => $meta_values,
-         'compare' => $meta_compare,
-         'type' => $meta_type
-      ); 
+      if(!empty($meta_values)){
+         
+         $return = array(
+            'key' => $meta_key,
+            'value' => $meta_values,
+            'compare' => $meta_compare,
+            'type' => $meta_type
+         );          
+      }else{
+         // If $meta_values is empty, don't query for 'value'
+         $return = array(
+            'key' => $meta_key,
+            'compare' => $meta_compare,
+            'type' => $meta_type
+         ); 
+         
+      }
       
       return $return; 
          
@@ -334,6 +343,20 @@ function alm_parse_meta_value($meta_value, $meta_compare){
    return $meta_values;
 }
 
+
+
+/*
+*  alm_get_repeater_type
+*  Get type of repeater
+*  
+*  @return $type;
+*  @since 2.9
+*/
+function alm_get_repeater_type($repeater){
+	$type = preg_split('/(?=\d)/', $repeater, 2); // split $repeater value at number to determine type
+   $type = $type[0]; // default | repeater | template_	
+	return $type;
+}
 
 
 

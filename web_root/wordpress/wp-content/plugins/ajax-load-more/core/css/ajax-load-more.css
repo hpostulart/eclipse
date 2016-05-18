@@ -2,7 +2,7 @@
  * Ajax Load More
  * http://wordpress.org/plugins/ajax-load-more/
  *
- * Copyright 2015 Connekt Media - http://connekthq.com
+ * Copyright 2016 Connekt Media - https://connekthq.com
  * Free to use under the GPLv2 license.
  * http://www.gnu.org/licenses/gpl-2.0.html
  *
@@ -169,9 +169,15 @@ button.alm-load-more-btn{
 .ajax-load-more-wrap.infinite button.alm-load-more-btn {
    width: 100%;
    background-color: transparent !important; 
+   -webkit-box-shadow: none !important;
+   -moz-box-shadow: none !important;
+   -o-box-shadow: none !important;
+   -ms-box-shadow: none !important;
+   box-shadow: none !important;
    overflow: hidden;
    text-indent: -9999px; 
    cursor: default !important;
+   outline: none !important;
 }
    .ajax-load-more-wrap.infinite button.alm-load-more-btn:before {
       display: none !important;  
