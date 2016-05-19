@@ -31,7 +31,8 @@ header.banner{
       width: auto;
 
       &.current-menu-item,
-      &.current_page_parent{
+      &.current_page_parent,
+      &.current-post-ancestor{
         background: $brand-primary;
         a{
           color: white;

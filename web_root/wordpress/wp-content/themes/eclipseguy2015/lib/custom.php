@@ -90,3 +90,27 @@ function eg_get_excerpt_by_id( $post, $length = 10, $tags = '<a><em><strong>', $
   // return apply_filters( 'the_content', $the_excerpt );
   return $the_excerpt;
 }
+
+
+
+
+
+/// set up proper menu highlight for blog category posts (ie. highlight 'blog' in main nav)
+
+
+// highlight active custom post page in nav
+add_filter( 'nav_menu_css_class', 'eg_menu_classes', 10, 2 );
+function eg_menu_classes( $classes , $item ){
+  // $curcat = $cat;
+
+  // var_dump($item);
+  if ( is_single() && has_category('blog') ) {
+
+    // var_dump($item->url);
+    // remove unwanted classes if found
+    $classes = str_replace( 'current_page_parent', '', $classes );
+
+
+  }
+  return $classes;
+}
